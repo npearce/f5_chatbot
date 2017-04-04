@@ -8,20 +8,19 @@
 #
 
 module.exports = (robot) ->
+  
   robot.hear /life/i, (res) ->
     res.send "42"
 
-  robot.respond /iwf setAddr (.*)/i, (res) ->
+  robot.respond /set address (.*)/i, (res) ->
     #Take the hostname/ipAddress from slack and 'set.brain.iwfHost
     addr = res.match[1]
     robot.brain.set 'iwf_addr', addr
     res.reply "Address stored: #{addr}"
 
-  robot.respond /iwf getToken (.*) (.*)/i, (res) ->
+  robot.respond /get token (.*) (.*)/i, (res) ->
     #Collect username and passowrd from slack. Get a token. Save it in 'set.brain'
     addr = robot.brain.get('iwf_addr')
-#    username = res.match[1]
-#    password = res.match[2]
     data = JSON.stringify({
       username: res.match[1],
       password: res.match[2],
@@ -39,7 +38,7 @@ module.exports = (robot) ->
         robot.brain.set 'iwf_token', token
         res.reply "Token: #{token}"
 
-  robot.respond /iwf getServices/i, (res) ->
+  robot.respond /(list|show) services/i, (res) ->
     addr = robot.brain.get('iwf_addr')
     token = robot.brain.get('iwf_token')
     options = rejectUnauthorized: false #ignore self-signed certs
@@ -76,6 +75,7 @@ module.exports = (robot) ->
           return
 
         res.send "Got back #{body}"
+
 
 # Useful
 #  options =
