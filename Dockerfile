@@ -10,5 +10,8 @@ RUN yo hubot --owner="Nathan Pearce <n.pearce@f5.com>" --name=hal --description=
 
 WORKDIR /home/hubot
 
+ADD https://raw.githubusercontent.com/npearce/f5_hubot/master/scripts/f5_iworkflow.coffee /home/hubot/scripts
+#ADD "link to other *.coffee files" /home/hubot/scripts
+
 # your token goes here.... e.g. "HUBOT_SLACK_TOKEN=<your token>"
-CMD HUBOT_SLACK_TOKEN=xoxb-162499296080-RgdssleHKYeWcS8IDKwDYMua ./bin/hubot --adapter slack
+CMD ./bin/hubot --adapter slack

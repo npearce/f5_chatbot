@@ -8,15 +8,17 @@
 #
 
 module.exports = (robot) ->
-  
+
   robot.hear /life/i, (res) ->
     res.send "42"
+
 
   robot.respond /set address (.*)/i, (res) ->
     #Take the hostname/ipAddress from slack and 'set.brain.iwfHost
     addr = res.match[1]
     robot.brain.set 'iwf_addr', addr
     res.reply "Address stored: #{addr}"
+
 
   robot.respond /get token (.*) (.*)/i, (res) ->
     #Collect username and passowrd from slack. Get a token. Save it in 'set.brain'
@@ -37,6 +39,7 @@ module.exports = (robot) ->
         token = data.token.token
         robot.brain.set 'iwf_token', token
         res.reply "Token: #{token}"
+
 
   robot.respond /(list|show) services/i, (res) ->
     addr = robot.brain.get('iwf_addr')
