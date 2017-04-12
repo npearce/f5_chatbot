@@ -1,18 +1,24 @@
 # Description:
-#   Simple robot to provide communication with F5 iControl declarative interfaces
+#   Simple robot to provide communication with F5 iControl declarative interfaces via the F5 iWorkflow platform
+#   Maintainer:
 #   @npearce
 #   http://github/com/npearce
 #
 # Notes:
-#   Tested against iWorkflow v2.2.0
+#   Tested against iWorkflow v2.2.0 on AWS
+#   Running on Docker container/alpine linux
 #
 
 module.exports = (robot) ->
 
+#A quick 'hear'ing test
   robot.hear /life/i, (res) ->
     res.send "42"
 
 
+######## BEGIN Environment Setup ########
+
+#Store the iWorkflow IP Address in a variable for future use
   robot.respond /set address (.*)/i, (res) ->
     #Take the hostname/ipAddress from slack and 'set.brain.iwfHost
     addr = res.match[1]
@@ -40,6 +46,10 @@ module.exports = (robot) ->
         robot.brain.set 'iwf_token', token
         res.reply "Token: #{token}"
 
+######## END Environment Setup ########
+
+
+######## BEGIN iWorkflow Reads ########
 
   robot.respond /(list|show) services/i, (res) ->
     addr = robot.brain.get('iwf_addr')
@@ -69,6 +79,11 @@ module.exports = (robot) ->
                 service = data.items[i].name
                 res.reply "Service: #{service}"
 
+######## END iWorkflow Reads ########
+
+
+######## BEGIN Random tests ########
+
 
   robot.hear /goog/i, (res) ->
    robot.http("https://www.google.com")
@@ -79,9 +94,4 @@ module.exports = (robot) ->
 
         res.send "Got back #{body}"
 
-
-# Useful
-#  options =
-#    # don't verify server certificate against a CA, SCARY!
-#    rejectUnauthorized: false
-#  robot.http("https://midnight-train", options)
+######## END Random tests ########

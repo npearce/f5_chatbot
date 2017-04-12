@@ -1,17 +1,23 @@
-FROM mhart/alpine-node
+FROM alpine:latest
 
-RUN npm install -g yo generator-hubot
-RUN mkdir /home/hubot
+MAINTAINER Nathan Pearce <n.pearce@f5.com>
 
-# This might also need /home/hubot
-RUN chmod -R g+rw /root/.config /root/.npm
-RUN yo hubot --owner="Nathan Pearce <n.pearce@f5.com>" --name=hal --description="Simple bot for communicating with F5 iControl declarative interfaces" --adapter=slack --defaults
+RUN apk update && apk upgrade \
+  && apk add curl && apk add nodejs
 
+RUN npm update && npm install -g yo generator-hubot
+
+# Create a user for Hubot to run as
+RUN adduser -h /home/hubot -s /bin/sh -S hubot
+
+
+# Switch to the new 'hubot' user
+USER hubot
 
 WORKDIR /home/hubot
 
-ADD https://raw.githubusercontent.com/npearce/f5_hubot/master/scripts/f5_iworkflow.coffee /home/hubot/scripts
-#ADD "link to other *.coffee files" /home/hubot/scripts
+# This might also need /home/hubot
+RUN yo hubot --owner="Nathan Pearce <n.pearce@f5.com>" --name=hal --description="Simple bot for communicating with F5 iControl declarative interfaces" --adapter=slack --defaults
 
-# your token goes here.... e.g. "HUBOT_SLACK_TOKEN=<your token>"
-CMD ./bin/hubot --adapter slack
+#RUN curl https://raw.githubusercontent.com/npearce/f5_hubot/master/scripts/f5_iworkflow.coffee -o /home/hubot/scripts/f5_iworkflow.coffee
+COPY /scripts /home/hubot/
