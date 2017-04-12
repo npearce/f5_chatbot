@@ -20,4 +20,4 @@ WORKDIR /home/hubot
 RUN yo hubot --owner="Nathan Pearce <n.pearce@f5.com>" --name=hal --description="Simple bot for communicating with F5 iControl declarative interfaces" --adapter=slack --defaults
 
 #RUN curl https://raw.githubusercontent.com/npearce/f5_hubot/master/scripts/f5_iworkflow.coffee -o /home/hubot/scripts/f5_iworkflow.coffee
-COPY /scripts /home/hubot/
+COPY /scripts /home/hubot/scripts
