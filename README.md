@@ -2,8 +2,13 @@
 
 This is a simple robot to communicate with F5 iControl declarative interfaces.
 
-## About
-You'll need a Slack Token: https://get.slack.help/hc/en-us/articles/215770388-Create-and-regenerate-API-tokens
+## ABOUT
 
-Then you can run this, and add it your token:
-`docker run -it --rm npearce/f5_hubot -e HUBOT_SLACK_TOKEN=<your slack robot token goes here>`
+
+## REQUIREMENTS
+* Docker
+* A Slack bot token. Instructions here: https://get.slack.help/hc/en-us/articles/215770388-Create-and-regenerate-API-tokens
+
+
+## INSTALL
+`docker run -i --rm -e HUBOT_SLACK_TOKEN=<your slack robot token goes here> npearce/f5_hubot ./bin/hubot --adapter slack`
