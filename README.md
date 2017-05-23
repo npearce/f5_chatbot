@@ -14,7 +14,12 @@ f5_chatbot will be via the iWorkflow API Gateway, because it is awesome.
 
 ## REQUIREMENTS
 * Docker
-* A Slack Bot token. Instructions here: https://get.slack.help/hc/en-us/articles/215770388-Create-and-regenerate-API-tokens
+* A Slack Bot token
+
+**Docker:** Did you know you can get Docker CE for Windows/Mac now, too? Go here: https://www.docker.com/community-edition#/download
+
+**Slack Bot token:** For instructions on obtaining a token, visit here:
+https://get.slack.help/hc/en-us/articles/215770388-Create-and-regenerate-API-tokens
 
 
 ## INSTALL
@@ -30,7 +35,7 @@ version is 'community supported'.
 
 If you don't specify a tag, docker will automatically grab the 'latest'.
 However, you can specify a tag after the container name. For example, if you
-want the 'develop' branch, you can specify `npearce/f5_hubot:develop` when using
+want the 'develop' branch, you can specify `npearce/f5_chatbot:develop` when using
 the `docker run` commands below.
 
 
@@ -38,16 +43,16 @@ the `docker run` commands below.
 ### Auto (Production) mode
 
 Anywhere you have docker (I'm running it on my Macbook),
-execute the folling, using your own Slack Bot token:
+execute the following, using your own Slack Bot token:
 
-`docker run -t --rm -e HUBOT_SLACK_TOKEN=<your slack robot token goes here> --name f5_hubot npearce/f5_hubot ./bin/hubot --adapter slack`
+`docker run -t --rm -e HUBOT_SLACK_TOKEN=<your slack robot token goes here> --name f5_chatbot npearce/f5_chatbot ./bin/hubot --adapter slack`
 
-If successful, and hubot can reach your slack.com Channel, you should see:
+If successful, and f5_chatbot can reach your slack.com Channel, you should see:
 
 ```
-[ec2-user@DockerHost1 ~]$ docker run -t --rm -e HUBOT_SLACK_TOKEN=xoxb-123456789012-XXXXXXXXXXXXXXXXXXXXXXX --name f5_hubot_dev npearce/f5_hubot:develop ./bin/hubot --adapter slack
-Unable to find image 'npearce/f5_hubot' locally
-latest: Pulling from npearce/f5_hubot
+[ec2-user@DockerHost1 ~]$ docker run -t --rm -e HUBOT_SLACK_TOKEN=xoxb-123456789012-XXXXXXXXXXXXXXXXXXXXXXX --name f5_chatbot_dev npearce/f5_chatbot:develop ./bin/hubot --adapter slack
+Unable to find image 'npearce/f5_chatbot' locally
+latest: Pulling from npearce/f5_chatbot
 cfc728c1c558: Pull complete
 e486a69a8eb9: Pull complete
 8aa90680f1d7: Pull complete
@@ -57,7 +62,7 @@ e486a69a8eb9: Pull complete
 a7ff236e3f8a: Pull complete
 288ed923e78a: Pull complete
 Digest: sha256:92bbcb0c0e45202315ff2e6031f1bc0f3b523902197f72a66aad51d15ee1ec75
-Status: Downloaded newer image for npearce/f5_hubot
+Status: Downloaded newer image for npearce/f5_chatbot
 [Tue May 23 2017 18:01:04 GMT+0000 (UTC)] INFO Logged in as f5bot of n8lab
 [Tue May 23 2017 18:01:05 GMT+0000 (UTC)] INFO Slack client now connected
 [Tue May 23 2017 18:01:05 GMT+0000 (UTC)] INFO hubot-redis-brain: Using default redis on localhost:6379
@@ -67,9 +72,9 @@ Status: Downloaded newer image for npearce/f5_hubot
 
 ### Manual (developer) mode
 If you want to edit the scripts yourself, you will need a command prompt and
-the ability manually run hubot. To run the container, execute:
+the ability manually run f5_chatbot. To run the container, execute:
 
-`docker run -it --name f5_hubot_dev npearce/f5_hubot:develop /bin/sh`
+`docker run -it --name f5_chatbot_dev npearce/f5_chatbot:develop /bin/sh`
 
 Once loaded, you can run the f5_chatbot by executing:
 
@@ -79,16 +84,17 @@ Once loaded, you can run the f5_chatbot by executing:
 
 # Troubleshooting
 
-The following steps will be performed in "Manual (developer) mode" as per the
-instructions above.
+**NOTE:** The following steps will be performed in *"Manual (developer) mode"*
+as per the instructions above.
 
 
 ## Connectivity
 First we are going to test connectivity and DNS settings by performing a simple
-HTTP transaction using curl. This will verify whether your f5_chabot container
+HTTP transaction using curl. This will verify whether your f5_chatbot container
 has access to the Slack.com API:
 
-1) From the command prompt execute the following `curl` command:
+From the f5_chatbot container command-prompt, execute the following `curl`
+command:
 
 `curl -X GET https://slack.com/api/api.test`
 
@@ -106,15 +112,23 @@ settings.
 ## Slack credentials
 
 With your internet connectivity working, we will now test your **token** and
-**channel** settings by simulating a Slack Bot post using curl:
+**channel** settings by simulating a Slack Bot post using curl.
 
-1. Launch in "Manual (developer) mode" as per the instructions above.
-2. From the command prompt execute the following `curl` command, using your own
-*token*, and *channel* values:
+At the f5_chabot container command-prompt, execute the following example `curl`
+command using your own **token** and **channel** values:
 
-`curl -s -X POST "https://slack.com/api/chat.postMessage?username=curl_test&token=xoxb-123456789012-XXXXXXXXXXXXXXXXXXXXXXX&channel=f5_channel&text=test"`
+`curl -X POST "https://slack.com/api/chat.postMessage?username=curl_test&token=xoxb-123456789012-XXXXXXXXXXXXXXXXXXXXXXX&channel=f5_channel&text=test"`
 
+If successful, you should receive a response like the following:
 
+```
+{"ok":true,"channel":"C3PMZ8WEQ","ts":"1495574333.970231","message":{"text":"test","username":"test","bot_id":"B4T76NDNG","type":"message","subtype":"bot_message","ts":"1495574333.970231"}}
+```
+
+You should also see this appear in the the Slack client, or slack.com web site.
+
+If you are not successful, but passed the connectivity test above, please
+verify your token and slack-channel before filing a bug.
 
 # Support
 **F5_ChatBot** is a community supported project.
@@ -125,7 +139,7 @@ With your internet connectivity working, we will now test your **token** and
 If you encounter a problem, please do let us know by creating a GitHub Issue
 here:
 
-https://github.com/npearce/f5_hubot/issues
+https://github.com/npearce/f5_chatbot/issues
 
 
 ## Asking for help
