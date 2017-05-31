@@ -3,7 +3,7 @@ FROM alpine:latest
 MAINTAINER Nathan Pearce <n.pearce@f5.com>
 
 # Install some Alpine Packaes
-RUN apk update && apk upgrade && apk add curl && apk add nodejs
+RUN apk update && apk upgrade && apk add curl && apk add nodejs && apk add nodejs-npm
 
 # Install some Node packages
 RUN npm update && npm install -g yo generator-hubot
@@ -17,7 +17,7 @@ USER hubot
 WORKDIR /home/hubot
 
 # This might also need /home/hubot
-RUN yo hubot --owner="Nathan Pearce <n.pearce@f5.com>" --name=hal --description="Simple bot for communicating with F5 iControl declarative interfaces" --adapter=slack --defaults
+RUN yo hubot --owner="F5 ChatOps Community <https://n8lab.slack.com/messages/f5_chatops/>" --name=f5bot --description="Simple bot for communicating with F5 iControl declarative interfaces" --adapter=slack --defaults
 
 # Cleanup: deprecated
 RUN rm /home/hubot/hubot-scripts.json
