@@ -3,7 +3,7 @@ FROM alpine:latest
 MAINTAINER Nathan Pearce <n.pearce@f5.com>
 
 # Install some Alpine Packaes
-RUN apk update && apk upgrade && apk add curl && apk add nodejs && apk add npm
+RUN apk update && apk upgrade && apk add curl && apk add nodejs && apk add nodejs-npm
 
 # Install some Node packages
 RUN npm update && npm install -g yo generator-hubot
