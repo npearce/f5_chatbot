@@ -23,7 +23,6 @@ https://get.slack.help/hc/en-us/articles/215770388-Create-and-regenerate-API-tok
 
 
 ## INSTALL
-
 There are two tags you can use for this docker container:
 a) latest
 b) develop
@@ -82,6 +81,77 @@ Once loaded, you can run the f5_chatbot by executing:
 
 
 
+
+# Commands
+
+## Communicating with f5_chatbot
+Communicating with f5_chatbot can be done it two different ways:
+
+Via direct message:
+`help`
+
+Or via '@' mention in a slack channel that your bot is a member.
+@f5bot help
+
+Via direct message, only you will see the output. Via @ mention in a shared
+Slack Channel means the output will be viewed by all members of the channel.
+What a great way to share! :)
+
+All the commands, and their use are list by f5_chatbot when you send it the
+**help** command via direct message `help`, or via @ mention `@f5bot help`
+
+NOTE: To get started you need to provide f5_chatbot with some environment
+parameters. Refer to "Environment Settings" to get started.
+
+## Environment settings
+To see the current working environment, execute:
+
+### Viewing the current settings
+
+`show config`
+
+The default output is:
+
+```
+iWorkflow Address: null
+iWorkflow Username: null
+Auth Token: null
+iWorkflow Tenant: null
+```
+
+To use f5_chatbot, you need to provide these environment settings. The
+instructions for this are in the following sections.
+
+### Setting the iWorkflow Address
+You must tell f5_chabot which F5 iWorkflow platform you wish to work with. This
+can be changed at any time.
+
+`set address <x.x.x.x>`
+
+### Getting an Auth-token
+So that f5_hubot doesn't store yrou user credentials, we are going to request
+an auth token.
+
+`get token <username> <password>`
+
+A successful response will look like this:
+
+"Auth Token: KLDQ4DXWIDN4VAEHT5YB2AZ2B3"
+
+### Specifying a tenant
+An iWorkflow user can belong to multiple tenants. So, we need to tell f5_chatbot
+which tenant we want to work with. NOTE: You can change the tenant at any time!
+
+First, get a list of the iWorkflow Tenants by executing:
+
+`list tenants`
+
+
+To view the commands for setting these parameters, execute:
+
+`help`
+
+
 # Troubleshooting
 
 **NOTE:** The following steps will be performed in *"Manual (developer) mode"*
@@ -133,6 +203,7 @@ verify your token and slack-channel before filing a bug.
 # Support
 **F5_ChatBot** is a community supported project.
 
+Slack: https://n8lab.slack.com/messages/f5_chatops/
 
 ## Filing a bug
 
@@ -147,3 +218,14 @@ If you require operational assistance, or just have some questions about how it
 works, please join the f5_chatops slack channel, here:
 
 https://n8lab.slack.com/messages/f5_chatops/
+
+
+# Ideas
+
+1. Turns out Microsoft released a JavaScript library for MS Teams...
+   https://github.com/OfficeDev/microsoft-teams-library-js
+
+2. Generate configuration maps using d3.js
+   http://mbostock.github.io/d3/talk/20111018/tree.html
+
+   https://d3js.org
