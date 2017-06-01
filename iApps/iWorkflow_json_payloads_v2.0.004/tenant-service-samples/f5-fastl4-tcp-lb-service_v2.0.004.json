@@ -1,0 +1,66 @@
+{
+  "name": "example-f5-fastl4-tcp-lb",
+  "tenantTemplateReference": {
+    "link": "https://localhost/mgmt/cm/cloud/tenant/templates/iapp/f5-fastl4-tcp-lb"
+  },
+  "properties": [
+    {
+      "id": "cloudConnectorReference",
+      "value": "https://localhost/mgmt/cm/cloud/connectors/local/{{iwf_connector_uuid}}"
+    }
+  ],  
+  "vars": [
+    {
+      "name": "pool__addr",
+      "value": "{{appsvcs_vip_addr}}"
+    },
+    {
+      "name": "pool__port",
+      "value": "{{appsvcs_vip_port}}"
+    }
+  ],
+  "tables": [
+    {
+      "name": "pool__Pools",
+      "columns": [
+        "LbMethod"
+      ],
+      "rows": [
+        [
+          "round-robin"
+        ]
+      ]
+    },
+    {
+      "name": "monitor__Monitors",
+      "columns": [
+        "Name"
+      ],
+      "rows": [
+        [
+          "/Common/tcp"
+        ]
+      ]
+    },
+    {
+      "name": "pool__Members",
+      "columns": [
+        "IPAddress",
+        "Port",
+        "State"
+      ],
+      "rows": [
+        [
+          "{{appsvcs_member1_addr}}",
+          "{{appsvcs_member1_port}}",
+          "enabled"
+        ],
+        [
+          "{{appsvcs_member2_addr}}",
+          "{{appsvcs_member2_port}}",
+          "enabled"
+        ]
+      ]
+    }
+  ]
+}

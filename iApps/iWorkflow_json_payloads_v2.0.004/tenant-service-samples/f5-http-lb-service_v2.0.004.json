@@ -1,0 +1,41 @@
+{
+  "name": "example-f5-http-lb",
+  "tenantTemplateReference": {
+    "link": "https://localhost/mgmt/cm/cloud/tenant/templates/iapp/f5-http-lb"
+  },
+  "vars": [
+    {
+      "name": "pool__addr",
+      "value": "{{appsvcs_vip_addr}}"
+    },
+    {
+      "name": "pool__port",
+      "value": "{{appsvcs_vip_port}}"
+    }
+  ],
+  "tables": [
+    {
+      "name": "pool__Members",
+      "columns": [
+        "IPAddress",
+        "State"
+      ],
+      "rows": [
+        [
+          "{{appsvcs_member1_addr}}",
+          "enabled"
+        ],
+        [
+          "{{appsvcs_member2_addr}}",
+          "enabled"
+        ]
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "id": "cloudConnectorReference",
+      "value": "https://localhost/mgmt/cm/cloud/connectors/local/{{iwf_connector_uuid}}"
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+    "name": "example-f5-https-waf-lb",
+        "tenantTemplateReference": {
+            "link": "https://localhost/mgmt/cm/cloud/tenant/templates/iapp/f5-https-waf-lb"
+        },
+        "vars": [
+        {},
+        {
+            "name": "pool__addr",
+            "value": "{{appsvcs_vip_addr}}"
+        },
+        {
+            "name": "pool__port",
+            "value": "{{appsvcs_vip_port}}"
+        },
+        {},
+        {
+            "name": "vs__ProfileClientSSLCert",
+            "value": "/Common/default.crt"
+        },
+        {
+            "name": "vs__ProfileClientSSLKey",
+            "value": "/Common/default.key"
+        }
+    ],
+        "tables": [
+        {
+            "name": "pool__Pools",
+            "columns": [
+                "Index",
+            "LbMethod",
+            "Monitor"
+                ],
+            "rows": [
+                [
+                "0",
+            "round-robin",
+            "0"
+                ]
+                ]
+        },
+        {
+            "name": "monitor__Monitors",
+            "columns": [
+                "Index",
+            "Name"
+                ],
+            "rows": [
+                [
+                "0",
+            "/Common/http"
+                ]
+                ]
+        },
+        {
+            "name": "l7policy__rulesMatch",
+            "columns": [
+                "Group",
+            "Operand",
+            "Condition",
+            "Value"
+                ],
+            "rows": [
+                [
+                "0",
+            "http-uri/request/path",
+            "starts-with",
+            "/"
+                ],
+            [
+                "default",
+            "",
+            "",
+            ""
+                ]
+                ]
+        },
+        {
+            "name": "l7policy__rulesAction",
+            "columns": [
+                "Group",
+            "Target",
+            "Parameter"
+                ],
+            "rows": [
+                [
+                "0",
+            "asm/request/enable/policy",
+            "/Common/my_demo_policy"
+                ],
+            [
+                "0",
+            "forward/request/select/pool",
+            "pool:0"
+                ],
+            [
+                "default",
+            "forward/request/reset",
+            ""
+                ]
+                ]
+        },
+        {
+            "name": "pool__Members",
+            "columns": [
+                "Index",
+            "IPAddress",
+            "Port",
+            "State"
+                ],
+            "rows": [
+                [
+                "0",
+            "{{appsvcs_member1_addr}}",
+            "{{appsvcs_member1_port}}",
+            "enabled"
+                ],
+            [
+                "0",
+            "{{appsvcs_member2_addr}}",
+            "{{appsvcs_member2_port}}",
+            "enabled"
+                ]
+                ]
+        }
+    ],
+        "properties": [
+        {
+            "id": "cloudConnectorReference",
+            "isRequired": false,
+            "value": "https://localhost/mgmt/cm/cloud/connectors/local/{{iwf_connector_uuid}}"
+        }
+    ]
+}

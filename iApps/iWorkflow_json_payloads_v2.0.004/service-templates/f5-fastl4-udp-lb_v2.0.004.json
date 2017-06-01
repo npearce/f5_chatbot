@@ -1,0 +1,1643 @@
+{
+    "templateName": "f5-fastl4-udp-lb",
+        "parentReference": {
+            "link":"/mgmt/cm/cloud/templates/iapp/appsvcs_integration_v2.0.004"
+        },
+        "properties": [
+        {
+            "id": "cloudConnectorReference",
+            "displayName": "Cloud Connector",
+            "isRequired": true
+        }
+    ],
+        "sectionOrderOfPresentation": [
+            "iApp Options",
+        "Virtual Server Listener & Pool Configuration",
+        "Pool Monitor(s) Configuration",
+        "Virtual Server Configuration",
+        "L7 Traffic Policy",
+        "L4-7 Helpers",
+        "Custom Extensions Section"
+            ],
+        "overrides": {
+            "vars": [
+            {
+                "name": "iapp__strictUpdates",
+                "description": "iApp: Strict Updates",
+                "displayName": "strictUpdates",
+                "isRequired": false,
+                "provider": "enabled"
+            },
+            {
+                "name": "iapp__appStats",
+                "description": "iApp: Statistics Handler Creation",
+                "displayName": "appStats",
+                "isRequired": false,
+                "provider": "enabled"
+            },
+            {
+                "name": "iapp__mode",
+                "description": "iApp: Mode",
+                "displayName": "mode",
+                "isRequired": false,
+                "provider": "auto"
+            },
+            {
+                "name": "iapp__logLevel",
+                "description": "iApp: Log Level",
+                "displayName": "logLevel",
+                "isRequired": false,
+                "provider": "7"
+            },
+            {
+                "name": "iapp__routeDomain",
+                "description": "iApp: Route Domain",
+                "displayName": "routeDomain",
+                "isRequired": false,
+                "provider": "auto"
+            },
+            {
+                "name": "iapp__asmDeployMode",
+                "description": "iApp: ASM: Deployment Mode",
+                "displayName": "asmDeployMode",
+                "isRequired": false,
+                "provider": "preserve-bypass",
+                "choices": [
+                {
+                    "value": "preserve-bypass",
+                    "description": "preserve-bypass"
+                },
+                {
+                    "value": "preserve-block",
+                    "description": "preserve-block"
+                },
+                {
+                    "value": "redeploy-bypass",
+                    "description": "redeploy-bypass"
+                },
+                {
+                    "value": "redeploy-block",
+                    "description": "redeploy-block"
+                }
+                ]
+            },
+            {
+                "name": "iapp__apmDeployMode",
+                "description": "iApp: APM: Deployment Mode",
+                "displayName": "apmDeployMode",
+                "isRequired": false,
+                "provider": "preserve-bypass",
+                "choices": [
+                {
+                    "value": "preserve-bypass",
+                    "description": "preserve-bypass"
+                },
+                {
+                    "value": "preserve-block",
+                    "description": "preserve-block"
+                },
+                {
+                    "value": "redeploy-bypass",
+                    "description": "redeploy-bypass"
+                },
+                {
+                    "value": "redeploy-block",
+                    "description": "redeploy-block"
+                }
+                ]
+            },
+            {
+                "name": "pool__addr",
+                "description": "Virtual Server: Address",
+                "displayName": "addr",
+                "isRequired": true,
+                "defaultValue": "",
+                "providerType": "NODE",
+                "serverTier": "Default"
+            },
+            {
+                "name": "pool__mask",
+                "description": "Virtual Server: Mask",
+                "displayName": "mask",
+                "isRequired": true,
+                "provider": "255.255.255.255"
+            },
+            {
+                "name": "pool__port",
+                "description": "Virtual Server: Port",
+                "displayName": "port",
+                "isRequired": true,
+                "defaultValue": "",
+                "providerType": "PORT",
+                "serverTier": "Default"
+            },
+            {
+                "name": "pool__DefaultPoolIndex",
+                "description": "Virtual Server: Default Pool Index",
+                "displayName": "DefaultPoolIndex",
+                "isRequired": false,
+                "provider": "0"
+            },
+            {
+                "name": "pool__MemberDefaultPort",
+                "description": "Pool: Member Default Port",
+                "displayName": "MemberDefaultPort",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__Name",
+                "description": "Virtual Server: Name",
+                "displayName": "Name",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__Description",
+                "description": "Virtual Server: Description",
+                "displayName": "Description",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__RouteAdv",
+                "description": "Virtual Server: Route Advertisement",
+                "displayName": "RouteAdv",
+                "isRequired": false,
+                "provider": "disabled",
+                "choices": [
+                {
+                    "value": "disabled",
+                    "description": "disabled"
+                },
+                {
+                    "value": "all_vs",
+                    "description": "all_vs"
+                },
+                {
+                    "value": "any_vs",
+                    "description": "any_vs"
+                },
+                {
+                    "value": "always",
+                    "description": "always"
+                }
+                ]
+            },
+            {
+                "name": "vs__SourceAddress",
+                "description": "Virtual Server: Source Address",
+                "displayName": "SourceAddress",
+                "isRequired": false,
+                "provider": "0.0.0.0\/0"
+            },
+            {
+                "name": "vs__IpProtocol",
+                "description": "Virtual Server: IP Protocol",
+                "displayName": "IpProtocol",
+                "isRequired": false,
+                "provider": "udp"
+            },
+            {
+                "name": "vs__ConnectionLimit",
+                "description": "Virtual Server: Virtual Server Connection Limit (0=unlimited)",
+                "displayName": "ConnectionLimit",
+                "isRequired": false,
+                "provider": "0"
+            },
+            {
+                "name": "vs__ProfileClientProtocol",
+                "description": "Virtual Server: Client-side L4 Protocol Profile",
+                "displayName": "ProfileClientProtocol",
+                "isRequired": false,
+                "provider": "\/Common\/fastL4"
+            },
+            {
+                "name": "vs__ProfileServerProtocol",
+                "description": "Virtual Server: Server-side L4 Protocol Profile",
+                "displayName": "ProfileServerProtocol",
+                "isRequired": false,
+                "provider": "\/Common\/fastL4"
+            },
+            {
+                "name": "vs__ProfileHTTP",
+                "description": "Virtual Server: HTTP Profile",
+                "displayName": "ProfileHTTP",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileOneConnect",
+                "description": "Virtual Server: OneConnect Profile",
+                "displayName": "ProfileOneConnect",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileCompression",
+                "description": "Virtual Server: Compression Profile",
+                "displayName": "ProfileCompression",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileAnalytics",
+                "description": "Virtual Server: Analytics Profile",
+                "displayName": "ProfileAnalytics",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileRequestLogging",
+                "description": "Virtual Server: Request Logging Profile",
+                "displayName": "ProfileRequestLogging",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileDefaultPersist",
+                "description": "Virtual Server: Default Persistence Profile",
+                "displayName": "ProfileDefaultPersist",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileFallbackPersist",
+                "description": "Virtual Server: Fallback Persistence Profile",
+                "displayName": "ProfileFallbackPersist",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__SNATConfig",
+                "description": "Virtual Server: SNAT Configuration (enter SNAT pool name, 'automap' or leave blank to disable SNAT)",
+                "displayName": "SNATConfig",
+                "isRequired": false,
+                "provider": "automap"
+            },
+            {
+                "name": "vs__ProfileServerSSL",
+                "description": "Virtual Server: Server SSL Profile",
+                "displayName": "ProfileServerSSL",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileClientSSL",
+                "description": "Virtual Server: Client SSL Profile",
+                "displayName": "ProfileClientSSL",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileClientSSLCert",
+                "description": "Virtual Server: Client SSL Certificate",
+                "displayName": "ProfileClientSSLCert",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileClientSSLKey",
+                "description": "Virtual Server: Client SSL Key",
+                "displayName": "ProfileClientSSLKey",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileClientSSLChain",
+                "description": "Virtual Server: Client SSL Certificate Chain",
+                "displayName": "ProfileClientSSLChain",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileClientSSLCipherString",
+                "description": "Virtual Server: Client SSL Cipher String",
+                "displayName": "ProfileClientSSLCipherString",
+                "isRequired": false,
+                "provider": "DEFAULT"
+            },
+            {
+                "name": "vs__ProfileClientSSLAdvOptions",
+                "description": "Virtual Server: Client SSL Advanced Options",
+                "displayName": "ProfileClientSSLAdvOptions",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileSecurityLogProfiles",
+                "description": "Virtual Server: Security Logging Profiles",
+                "displayName": "ProfileSecurityLogProfiles",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileSecurityIPBlacklist",
+                "description": "Virtual Server: IP Blacklist Profile",
+                "displayName": "ProfileSecurityIPBlacklist",
+                "isRequired": false,
+                "provider": "none",
+                "choices": [
+                {
+                    "value": "none",
+                    "description": "none"
+                },
+                {
+                    "value": "enabled-block",
+                    "description": "enabled-block"
+                },
+                {
+                    "value": "enabled-log",
+                    "description": "enabled-log"
+                }
+                ]
+            },
+            {
+                "name": "vs__ProfileSecurityDoS",
+                "description": "Virtual Server: Security: DoS Profile",
+                "displayName": "ProfileSecurityDoS",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileAccess",
+                "description": "Virtual Server: Access Profile",
+                "displayName": "ProfileAccess",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfileConnectivity",
+                "description": "Virtual Server: Connectivity Profile",
+                "displayName": "ProfileConnectivity",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__ProfilePerRequest",
+                "description": "Virtual Server: Per-Request Profile",
+                "displayName": "ProfilePerRequest",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__OptionSourcePort",
+                "description": "Virtual Server: Source Port Behavior",
+                "displayName": "OptionSourcePort",
+                "isRequired": false,
+                "provider": "preserve",
+                "choices": [
+                {
+                    "value": "preserve",
+                    "description": "preserve"
+                },
+                {
+                    "value": "preserve-strict",
+                    "description": "preserve-strict"
+                },
+                {
+                    "value": "change",
+                    "description": "change"
+                }
+                ]
+            },
+            {
+                "name": "vs__OptionConnectionMirroring",
+                "description": "Virtual Server: Connection Mirroring",
+                "displayName": "OptionConnectionMirroring",
+                "isRequired": false,
+                "provider": "disabled"
+            },
+            {
+                "name": "vs__Irules",
+                "description": "Virtual Server: iRules (to specify multiple iRules seperate with a comma ex: irule1,irule2,irule3)",
+                "displayName": "Irules",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__AdvOptions",
+                "description": "Virtual Server: Advanced Options",
+                "displayName": "AdvOptions",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__AdvProfiles",
+                "description": "Virtual Server: Advanced Profiles",
+                "displayName": "AdvProfiles",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__AdvPolicies",
+                "description": "Virtual Server: Advanced Policies",
+                "displayName": "AdvPolicies",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "vs__VirtualAddrAdvOptions",
+                "description": "Virtual Address: Advanced Options",
+                "displayName": "VirtualAddrAdvOptions",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "l7policy__strategy",
+                "description": "L7 Policy: Match Strategy",
+                "displayName": "strategy",
+                "isRequired": false,
+                "provider": "\/Common\/first-match",
+                "choices": [
+                {
+                    "value": "\/Common\/first-match",
+                    "description": "\/Common\/first-match"
+                },
+                {
+                    "value": "\/Common\/best-match",
+                    "description": "\/Common\/best-match"
+                },
+                {
+                    "value": "\/Common\/all-match",
+                    "description": "\/Common\/all-match"
+                }
+                ]
+            },
+            {
+                "name": "l7policy__defaultASM",
+                "description": "L7 Policy: Default ASM Policy",
+                "displayName": "defaultASM",
+                "isRequired": false,
+                "provider": "bypass"
+            },
+            {
+                "name": "l7policy__defaultL7DOS",
+                "description": "L7 Policy: Default L7 DoS Policy",
+                "displayName": "defaultL7DOS",
+                "isRequired": false,
+                "provider": "bypass"
+            },
+            {
+                "name": "feature__statsTLS",
+                "description": "TLS\/SSL: Stats Reporting",
+                "displayName": "statsTLS",
+                "isRequired": false,
+                "provider": "auto",
+                "choices": [
+                {
+                    "value": "auto",
+                    "description": "auto"
+                },
+                {
+                    "value": "enabled",
+                    "description": "enabled"
+                },
+                {
+                    "value": "disabled",
+                    "description": "disabled"
+                }
+                ]
+            },
+            {
+                "name": "feature__statsHTTP",
+                "description": "HTTP: Stats Reporting",
+                "displayName": "statsHTTP",
+                "isRequired": false,
+                "provider": "auto",
+                "choices": [
+                {
+                    "value": "auto",
+                    "description": "auto"
+                },
+                {
+                    "value": "enabled",
+                    "description": "enabled"
+                },
+                {
+                    "value": "disabled",
+                    "description": "disabled"
+                }
+                ]
+            },
+            {
+                "name": "feature__insertXForwardedFor",
+                "description": "HTTP: Insert X-Forwarded-For Header",
+                "displayName": "insertXForwardedFor",
+                "isRequired": false,
+                "provider": "auto",
+                "choices": [
+                {
+                    "value": "auto",
+                    "description": "auto"
+                },
+                {
+                    "value": "enabled",
+                    "description": "enabled"
+                },
+                {
+                    "value": "disabled",
+                    "description": "disabled"
+                }
+                ]
+            },
+            {
+                "name": "feature__redirectToHTTPS",
+                "description": "HTTP: Security: Create HTTP(80)->HTTPS(443) Redirect",
+                "displayName": "redirectToHTTPS",
+                "isRequired": false,
+                "provider": "auto",
+                "choices": [
+                {
+                    "value": "auto",
+                    "description": "auto"
+                },
+                {
+                    "value": "enabled",
+                    "description": "enabled"
+                },
+                {
+                    "value": "disabled",
+                    "description": "disabled"
+                }
+                ]
+            },
+            {
+                "name": "feature__sslEasyCipher",
+                "description": "TLS\/SSL: Easy Cipher String (overrides VS section setting)",
+                "displayName": "sslEasyCipher",
+                "isRequired": false,
+                "provider": "disabled",
+                "choices": [
+                {
+                    "value": "compatible",
+                    "description": "compatible"
+                },
+                {
+                    "value": "medium",
+                    "description": "medium"
+                },
+                {
+                    "value": "high",
+                    "description": "high"
+                },
+                {
+                    "value": "tls_1.2",
+                    "description": "tls_1.2"
+                },
+                {
+                    "value": "tls_1.1+1.2",
+                    "description": "tls_1.1+1.2"
+                },
+                {
+                    "value": "disabled",
+                    "description": "disabled"
+                }
+                ]
+            },
+            {
+                "name": "feature__securityEnableHSTS",
+                "description": "HTTP: Security: Enable HTTP Strict Transport Security (only valid if ClientSSL is configured)",
+                "displayName": "securityEnableHSTS",
+                "isRequired": false,
+                "provider": "disabled",
+                "choices": [
+                {
+                    "value": "disabled",
+                    "description": "disabled"
+                },
+                {
+                    "value": "enabled",
+                    "description": "enabled"
+                },
+                {
+                    "value": "enabled-preload",
+                    "description": "enabled-preload"
+                },
+                {
+                    "value": "enabled-subdomain",
+                    "description": "enabled-subdomain"
+                },
+                {
+                    "value": "enabled-preload-subdomain",
+                    "description": "enabled-preload-subdomain"
+                }
+                ]
+            },
+            {
+                "name": "feature__easyL4Firewall",
+                "description": "Security: Firewall: Configure L4 Firewall Policy",
+                "displayName": "easyL4Firewall",
+                "isRequired": false,
+                "provider": "auto",
+                "choices": [
+                {
+                    "value": "auto",
+                    "description": "auto"
+                },
+                {
+                    "value": "base",
+                    "description": "base"
+                },
+                {
+                    "value": "base+ip_blacklist_block",
+                    "description": "base+ip_blacklist_block"
+                },
+                {
+                    "value": "base+ip_blacklist_log",
+                    "description": "base+ip_blacklist_log"
+                },
+                {
+                    "value": "disabled",
+                    "description": "disabled"
+                }
+                ]
+            },
+            {
+                "name": "extensions__Field1",
+                "description": "Extensions: Field 1",
+                "displayName": "Field1",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "extensions__Field2",
+                "description": "Extensions: Field 2",
+                "displayName": "Field2",
+                "isRequired": false,
+                "provider": ""
+            },
+            {
+                "name": "extensions__Field3",
+                "description": "Extensions: Field 3",
+                "displayName": "Field3",
+                "isRequired": false,
+                "provider": ""
+            }
+            ],
+                "tables": [
+                {
+                    "name": "pool__Pools",
+                    "columns": [
+                    {
+                        "name": "Index",
+                        "description": "Index:",
+                        "displayName": "Index",
+                        "isRequired": false,
+                        "provider": "0"
+                    },
+                    {
+                        "name": "Name",
+                        "description": "Name:",
+                        "displayName": "Name",
+                        "isRequired": false,
+                        "provider": ""
+                    },
+                    {
+                        "name": "Description",
+                        "description": "Description:",
+                        "displayName": "Description",
+                        "isRequired": false,
+                        "provider": ""
+                    },
+                    {
+                        "name": "LbMethod",
+                        "description": "LB Method:",
+                        "displayName": "LbMethod",
+                        "isRequired": false,
+                        "defaultValue": "round-robin",
+                        "choices": [
+                        {
+                            "value": "dynamic-ratio-member",
+                            "description": "dynamic-ratio-member"
+                        },
+                        {
+                            "value": "dynamic-ratio-node",
+                            "description": "dynamic-ratio-node"
+                        },
+                        {
+                            "value": "fastest-app-response",
+                            "description": "fastest-app-response"
+                        },
+                        {
+                            "value": "fastest-node",
+                            "description": "fastest-node"
+                        },
+                        {
+                            "value": "least-connections-member",
+                            "description": "least-connections-member"
+                        },
+                        {
+                            "value": "least-connections-node",
+                            "description": "least-connections-node"
+                        },
+                        {
+                            "value": "least-sessions",
+                            "description": "least-sessions"
+                        },
+                        {
+                            "value": "observed-member",
+                            "description": "observed-member"
+                        },
+                        {
+                            "value": "observed-node",
+                            "description": "observed-node"
+                        },
+                        {
+                            "value": "predictive-member",
+                            "description": "predictive-member"
+                        },
+                        {
+                            "value": "predictive-node",
+                            "description": "predictive-node"
+                        },
+                        {
+                            "value": "round-robin",
+                            "description": "round-robin"
+                        },
+                        {
+                            "value": "ratio-member",
+                            "description": "ratio-member"
+                        },
+                        {
+                            "value": "ratio-node",
+                            "description": "ratio-node"
+                        },
+                        {
+                            "value": "ratio-session",
+                            "description": "ratio-session"
+                        },
+                        {
+                            "value": "ratio-least-connections-member",
+                            "description": "ratio-least-connections-member"
+                        },
+                        {
+                            "value": "ratio-least-connections-node",
+                            "description": "ratio-least-connections-node"
+                        },
+                        {
+                            "value": "weighted-least-connections-member",
+                            "description": "weighted-least-connections-member"
+                        }
+                        ]
+                    },
+                    {
+                        "name": "Monitor",
+                        "description": "Monitor(s):",
+                        "displayName": "Monitor",
+                        "isRequired": false,
+                        "provider": "0"
+                    },
+                    {
+                        "name": "AdvOptions",
+                        "description": "Adv Options:",
+                        "displayName": "AdvOptions",
+                        "isRequired": false,
+                        "provider": ""
+                    }
+                    ],
+                        "description": "Pool: Pool Table"
+                },
+                {
+                    "name": "pool__Members",
+                    "columns": [
+                    {
+                        "name": "Index",
+                        "description": "Pool Idx:",
+                        "displayName": "Index",
+                        "isRequired": false,
+                        "provider": "0"
+                    },
+                    {
+                        "name": "IPAddress",
+                        "description": "IP\/Node Name:",
+                        "displayName": "IPAddress",
+                        "isRequired": false,
+                        "defaultValue": "",
+                        "providerType": "NODE"
+                    },
+                    {
+                        "name": "Port",
+                        "description": "Port:",
+                        "displayName": "Port",
+                        "isRequired": false,
+                        "defaultValue": "80",
+                        "providerType": "PORT"
+                    },
+                    {
+                        "name": "ConnectionLimit",
+                        "description": "Connection Limit:",
+                        "displayName": "ConnectionLimit",
+                        "isRequired": false,
+                        "provider": "0"
+                    },
+                    {
+                        "name": "Ratio",
+                        "description": "Ratio:",
+                        "displayName": "Ratio",
+                        "isRequired": false,
+                        "provider": "1"
+                    },
+                    {
+                        "name": "PriorityGroup",
+                        "description": "Priority Group:",
+                        "displayName": "PriorityGroup",
+                        "isRequired": false,
+                        "provider": "0"
+                    },
+                    {
+                        "name": "State",
+                        "description": "State:",
+                        "displayName": "State",
+                        "isRequired": false,
+                        "defaultValue": "enabled",
+                        "choices": [
+                        {
+                            "value": "enabled",
+                            "description": "enabled"
+                        },
+                        {
+                            "value": "drain-disabled",
+                            "description": "drain-disabled"
+                        },
+                        {
+                            "value": "disabled",
+                            "description": "disabled"
+                        }
+                        ]
+                    },
+                    {
+                        "name": "AdvOptions",
+                        "description": "Adv Options:",
+                        "displayName": "AdvOptions",
+                        "isRequired": false,
+                        "provider": ""
+                    }
+                    ],
+                        "description": "Pool: Members",
+                        "serverTier": "Default"
+                },
+                {
+                    "name": "vs__Listeners",
+                    "columns": [
+                    {
+                        "name": "Listener",
+                        "description": "Listener:",
+                        "displayName": "Listener",
+                        "isRequired": false,
+                        "provider": ""
+                    },
+                    {
+                        "name": "Destination",
+                        "description": "Destination",
+                        "displayName": "Destination",
+                        "isRequired": false,
+                        "provider": ""
+                    }
+                    ],
+                        "description": "Virtual Server: Additional Listeners"
+                },
+                {
+                    "name": "vs__BundledItems",
+                    "columns": [
+                    {
+                        "name": "Resource",
+                        "description": "Resource:",
+                        "displayName": "Resource",
+                        "isRequired": false,
+                        "provider": "",
+                        "choices": [
+                        {
+                            "value": "** no bundled items **",
+                            "description": "** no bundled items **"
+                        }
+                        ]
+                    }
+                    ],
+                        "description": "Virtual Server: Bundled Items"
+                },
+                {
+                    "name": "l7policy__rulesMatch",
+                    "columns": [
+                    {
+                        "name": "Group",
+                        "description": "Group:",
+                        "displayName": "Group",
+                        "isRequired": false,
+                        "provider": ""
+                    },
+                    {
+                        "name": "Operand",
+                        "description": "Operand:",
+                        "displayName": "Operand",
+                        "isRequired": false,
+                        "provider": "",
+                        "choices": [
+                        {
+                            "value": "client-ssl\/request\/cipher",
+                            "description": "client-ssl\/request\/cipher"
+                        },
+                        {
+                            "value": "client-ssl\/request\/cipher-bits",
+                            "description": "client-ssl\/request\/cipher-bits"
+                        },
+                        {
+                            "value": "client-ssl\/request\/protocol",
+                            "description": "client-ssl\/request\/protocol"
+                        },
+                        {
+                            "value": "client-ssl\/response\/cipher",
+                            "description": "client-ssl\/response\/cipher"
+                        },
+                        {
+                            "value": "client-ssl\/response\/cipher-bits",
+                            "description": "client-ssl\/response\/cipher-bits"
+                        },
+                        {
+                            "value": "client-ssl\/response\/protocol",
+                            "description": "client-ssl\/response\/protocol"
+                        },
+                        {
+                            "value": "http-basic-auth\/request\/username",
+                            "description": "http-basic-auth\/request\/username"
+                        },
+                        {
+                            "value": "http-basic-auth\/request\/password",
+                            "description": "http-basic-auth\/request\/password"
+                        },
+                        {
+                            "value": "http-cookie\/request\/all\/name\/<name>",
+                            "description": "http-cookie\/request\/all\/name\/<name>"
+                        },
+                        {
+                            "value": "http-header\/request\/all\/name\/<name>",
+                            "description": "http-header\/request\/all\/name\/<name>"
+                        },
+                        {
+                            "value": "http-header\/request\/all\/name\/<name>",
+                            "description": "http-header\/request\/all\/name\/<name>"
+                        },
+                        {
+                            "value": "http-host\/request\/all",
+                            "description": "http-host\/request\/all"
+                        },
+                        {
+                            "value": "http-host\/request\/host",
+                            "description": "http-host\/request\/host"
+                        },
+                        {
+                            "value": "http-host\/request\/port",
+                            "description": "http-host\/request\/port"
+                        },
+                        {
+                            "value": "http-method\/request\/all",
+                            "description": "http-method\/request\/all"
+                        },
+                        {
+                            "value": "http-referer\/request\/all",
+                            "description": "http-referer\/request\/all"
+                        },
+                        {
+                            "value": "http-referer\/request\/extension",
+                            "description": "http-referer\/request\/extension"
+                        },
+                        {
+                            "value": "http-referer\/request\/host",
+                            "description": "http-referer\/request\/host"
+                        },
+                        {
+                            "value": "http-referer\/request\/path",
+                            "description": "http-referer\/request\/path"
+                        },
+                        {
+                            "value": "http-referer\/request\/path-segment\/index\/<index>",
+                            "description": "http-referer\/request\/path-segment\/index\/<index>"
+                        },
+                        {
+                            "value": "http-referer\/request\/port",
+                            "description": "http-referer\/request\/port"
+                        },
+                        {
+                            "value": "http-referer\/request\/query-parameter\/name\/<name>",
+                            "description": "http-referer\/request\/query-parameter\/name\/<name>"
+                        },
+                        {
+                            "value": "http-referer\/request\/scheme",
+                            "description": "http-referer\/request\/scheme"
+                        },
+                        {
+                            "value": "http-referer\/request\/unnamed-query-parameter\/index\/<index>",
+                            "description": "http-referer\/request\/unnamed-query-parameter\/index\/<index>"
+                        },
+                        {
+                            "value": "http-set-cookie\/response\/domain\/name\/<name>",
+                            "description": "http-set-cookie\/response\/domain\/name\/<name>"
+                        },
+                        {
+                            "value": "http-set-cookie\/response\/expiry\/name\/<name>",
+                            "description": "http-set-cookie\/response\/expiry\/name\/<name>"
+                        },
+                        {
+                            "value": "http-set-cookie\/response\/path\/name\/<name>",
+                            "description": "http-set-cookie\/response\/path\/name\/<name>"
+                        },
+                        {
+                            "value": "http-set-cookie\/response\/value\/name\/<name>",
+                            "description": "http-set-cookie\/response\/value\/name\/<name>"
+                        },
+                        {
+                            "value": "http-set-cookie\/response\/version\/name\/<name>",
+                            "description": "http-set-cookie\/response\/version\/name\/<name>"
+                        },
+                        {
+                            "value": "http-status\/response\/all",
+                            "description": "http-status\/response\/all"
+                        },
+                        {
+                            "value": "http-status\/response\/code",
+                            "description": "http-status\/response\/code"
+                        },
+                        {
+                            "value": "http-status\/response\/text",
+                            "description": "http-status\/response\/text"
+                        },
+                        {
+                            "value": "http-uri\/request\/all",
+                            "description": "http-uri\/request\/all"
+                        },
+                        {
+                            "value": "http-uri\/request\/extension",
+                            "description": "http-uri\/request\/extension"
+                        },
+                        {
+                            "value": "http-uri\/request\/host",
+                            "description": "http-uri\/request\/host"
+                        },
+                        {
+                            "value": "http-uri\/request\/path",
+                            "description": "http-uri\/request\/path"
+                        },
+                        {
+                            "value": "http-uri\/request\/path-segment\/index\/<index>",
+                            "description": "http-uri\/request\/path-segment\/index\/<index>"
+                        },
+                        {
+                            "value": "http-uri\/request\/port",
+                            "description": "http-uri\/request\/port"
+                        },
+                        {
+                            "value": "http-uri\/request\/query-parameter\/name\/<name>",
+                            "description": "http-uri\/request\/query-parameter\/name\/<name>"
+                        },
+                        {
+                            "value": "http-uri\/request\/scheme",
+                            "description": "http-uri\/request\/scheme"
+                        },
+                        {
+                            "value": "http-uri\/request\/unnamed-query-parameter\/index\/<index>",
+                            "description": "http-uri\/request\/unnamed-query-parameter\/index\/<index>"
+                        },
+                        {
+                            "value": "http-version\/request\/all",
+                            "description": "http-version\/request\/all"
+                        },
+                        {
+                            "value": "http-version\/request\/major",
+                            "description": "http-version\/request\/major"
+                        },
+                        {
+                            "value": "http-version\/request\/minor",
+                            "description": "http-version\/request\/minor"
+                        },
+                        {
+                            "value": "http-version\/request\/protocol",
+                            "description": "http-version\/request\/protocol"
+                        },
+                        {
+                            "value": "http-version\/response\/all",
+                            "description": "http-version\/response\/all"
+                        },
+                        {
+                            "value": "http-version\/response\/major",
+                            "description": "http-version\/response\/major"
+                        },
+                        {
+                            "value": "http-version\/response\/minor",
+                            "description": "http-version\/response\/minor"
+                        },
+                        {
+                            "value": "http-version\/response\/protocol",
+                            "description": "http-version\/response\/protocol"
+                        },
+                        {
+                            "value": "ssl-cert\/ssl-server-handshake\/common-name\/index\/<index>",
+                            "description": "ssl-cert\/ssl-server-handshake\/common-name\/index\/<index>"
+                        },
+                        {
+                            "value": "ssl-extension\/ssl-client-hello\/alpn",
+                            "description": "ssl-extension\/ssl-client-hello\/alpn"
+                        },
+                        {
+                            "value": "ssl-extension\/ssl-client-hello\/npn",
+                            "description": "ssl-extension\/ssl-client-hello\/npn"
+                        },
+                        {
+                            "value": "ssl-extension\/ssl-client-hello\/server-name",
+                            "description": "ssl-extension\/ssl-client-hello\/server-name"
+                        },
+                        {
+                            "value": "ssl-extension\/ssl-server-hello\/alpn",
+                            "description": "ssl-extension\/ssl-server-hello\/alpn"
+                        },
+                        {
+                            "value": "ssl-extension\/ssl-server-hello\/npn",
+                            "description": "ssl-extension\/ssl-server-hello\/npn"
+                        },
+                        {
+                            "value": "ssl-extension\/ssl-server-hello\/server-name",
+                            "description": "ssl-extension\/ssl-server-hello\/server-name"
+                        },
+                        {
+                            "value": "tcp\/request\/mss\/internal",
+                            "description": "tcp\/request\/mss\/internal"
+                        },
+                        {
+                            "value": "tcp\/request\/port\/internal",
+                            "description": "tcp\/request\/port\/internal"
+                        },
+                        {
+                            "value": "tcp\/request\/port\/local",
+                            "description": "tcp\/request\/port\/local"
+                        },
+                        {
+                            "value": "tcp\/request\/route-domain\/internal",
+                            "description": "tcp\/request\/route-domain\/internal"
+                        },
+                        {
+                            "value": "tcp\/request\/rtt\/internal",
+                            "description": "tcp\/request\/rtt\/internal"
+                        },
+                        {
+                            "value": "tcp\/request\/vlan\/internal",
+                            "description": "tcp\/request\/vlan\/internal"
+                        },
+                        {
+                            "value": "tcp\/request\/vlan-id\/internal",
+                            "description": "tcp\/request\/vlan-id\/internal"
+                        }
+                        ]
+                    },
+                    {
+                        "name": "Negate",
+                        "description": "Negate:",
+                        "displayName": "Negate",
+                        "isRequired": false,
+                        "provider": "no",
+                        "choices": [
+                        {
+                            "value": "no",
+                            "description": "no"
+                        },
+                        {
+                            "value": "yes",
+                            "description": "yes"
+                        }
+                        ]
+                    },
+                    {
+                        "name": "Condition",
+                        "description": "Condition:",
+                        "displayName": "Condition",
+                        "isRequired": false,
+                        "provider": "",
+                        "choices": [
+                        {
+                            "value": "equals",
+                            "description": "equals"
+                        },
+                        {
+                            "value": "starts-with",
+                            "description": "starts-with"
+                        },
+                        {
+                            "value": "ends-with",
+                            "description": "ends-with"
+                        },
+                        {
+                            "value": "contains",
+                            "description": "contains"
+                        },
+                        {
+                            "value": "greater",
+                            "description": "greater"
+                        },
+                        {
+                            "value": "greater-or-equal",
+                            "description": "greater-or-equal"
+                        },
+                        {
+                            "value": "less",
+                            "description": "less"
+                        },
+                        {
+                            "value": "less-or-equal",
+                            "description": "less-or-equal"
+                        }
+                        ]
+                    },
+                    {
+                        "name": "Value",
+                        "description": "Value:",
+                        "displayName": "Value",
+                        "isRequired": false,
+                        "provider": ""
+                    },
+                    {
+                        "name": "CaseSensitive",
+                        "description": "Case Sensitive:",
+                        "displayName": "CaseSensitive",
+                        "isRequired": false,
+                        "provider": "no",
+                        "choices": [
+                        {
+                            "value": "no",
+                            "description": "no"
+                        },
+                        {
+                            "value": "yes",
+                            "description": "yes"
+                        }
+                        ]
+                    },
+                    {
+                        "name": "Missing",
+                        "description": "Missing:",
+                        "displayName": "Missing",
+                        "isRequired": false,
+                        "provider": "no",
+                        "choices": [
+                        {
+                            "value": "no",
+                            "description": "no"
+                        },
+                        {
+                            "value": "yes",
+                            "description": "yes"
+                        }
+                        ]
+                    }
+                    ],
+                        "description": "L7 Policy: Rules: Matching"
+                },
+                {
+                    "name": "l7policy__rulesAction",
+                    "columns": [
+                    {
+                        "name": "Group",
+                        "description": "Group:",
+                        "displayName": "Group",
+                        "isRequired": false,
+                        "provider": ""
+                    },
+                    {
+                        "name": "Target",
+                        "description": "Target:",
+                        "displayName": "Target",
+                        "isRequired": false,
+                        "provider": "",
+                        "choices": [
+                        {
+                            "value": "asm\/request\/enable\/policy",
+                            "description": "asm\/request\/enable\/policy"
+                        },
+                        {
+                            "value": "asm\/request\/disable",
+                            "description": "asm\/request\/disable"
+                        },
+                        {
+                            "value": "cache\/request\/enable\/pin",
+                            "description": "cache\/request\/enable\/pin"
+                        },
+                        {
+                            "value": "cache\/request\/disable",
+                            "description": "cache\/request\/disable"
+                        },
+                        {
+                            "value": "cache\/response\/enable\/pin",
+                            "description": "cache\/response\/enable\/pin"
+                        },
+                        {
+                            "value": "cache\/respones\/disable",
+                            "description": "cache\/respones\/disable"
+                        },
+                        {
+                            "value": "compress\/request\/enable",
+                            "description": "compress\/request\/enable"
+                        },
+                        {
+                            "value": "compress\/request\/disable",
+                            "description": "compress\/request\/disable"
+                        },
+                        {
+                            "value": "compress\/response\/enable",
+                            "description": "compress\/response\/enable"
+                        },
+                        {
+                            "value": "compress\/response\/disable",
+                            "description": "compress\/response\/disable"
+                        },
+                        {
+                            "value": "decompress\/request\/enable",
+                            "description": "decompress\/request\/enable"
+                        },
+                        {
+                            "value": "decompress\/request\/disable",
+                            "description": "decompress\/request\/disable"
+                        },
+                        {
+                            "value": "decompress\/response\/enable",
+                            "description": "decompress\/response\/enable"
+                        },
+                        {
+                            "value": "decompress\/response\/disable",
+                            "description": "decompress\/response\/disable"
+                        },
+                        {
+                            "value": "forward\/request\/reset",
+                            "description": "forward\/request\/reset"
+                        },
+                        {
+                            "value": "forward\/request\/select\/clone-pool",
+                            "description": "forward\/request\/select\/clone-pool"
+                        },
+                        {
+                            "value": "forward\/request\/select\/member",
+                            "description": "forward\/request\/select\/member"
+                        },
+                        {
+                            "value": "forward\/request\/select\/nexthop",
+                            "description": "forward\/request\/select\/nexthop"
+                        },
+                        {
+                            "value": "forward\/request\/select\/node",
+                            "description": "forward\/request\/select\/node"
+                        },
+                        {
+                            "value": "forward\/request\/select\/pool",
+                            "description": "forward\/request\/select\/pool"
+                        },
+                        {
+                            "value": "forward\/request\/select\/rateclass",
+                            "description": "forward\/request\/select\/rateclass"
+                        },
+                        {
+                            "value": "forward\/request\/select\/snat",
+                            "description": "forward\/request\/select\/snat"
+                        },
+                        {
+                            "value": "forward\/request\/select\/snatpool",
+                            "description": "forward\/request\/select\/snatpool"
+                        },
+                        {
+                            "value": "forward\/request\/select\/vlan",
+                            "description": "forward\/request\/select\/vlan"
+                        },
+                        {
+                            "value": "forward\/request\/select\/vlan-id",
+                            "description": "forward\/request\/select\/vlan-id"
+                        },
+                        {
+                            "value": "http\/request\/enable",
+                            "description": "http\/request\/enable"
+                        },
+                        {
+                            "value": "http\/request\/disable",
+                            "description": "http\/request\/disable"
+                        },
+                        {
+                            "value": "http-cookie\/request\/insert\/name,value",
+                            "description": "http-cookie\/request\/insert\/name,value"
+                        },
+                        {
+                            "value": "http-cookie\/request\/remove\/name",
+                            "description": "http-cookie\/request\/remove\/name"
+                        },
+                        {
+                            "value": "http-header\/request\/insert\/name,value",
+                            "description": "http-header\/request\/insert\/name,value"
+                        },
+                        {
+                            "value": "http-header\/request\/remove\/name",
+                            "description": "http-header\/request\/remove\/name"
+                        },
+                        {
+                            "value": "http-header\/request\/replace\/name,value",
+                            "description": "http-header\/request\/replace\/name,value"
+                        },
+                        {
+                            "value": "http-header\/response\/insert\/name,value",
+                            "description": "http-header\/response\/insert\/name,value"
+                        },
+                        {
+                            "value": "http-header\/response\/remove\/name",
+                            "description": "http-header\/response\/remove\/name"
+                        },
+                        {
+                            "value": "http-header\/response\/replace\/name,value",
+                            "description": "http-header\/response\/replace\/name,value"
+                        },
+                        {
+                            "value": "http-host\/request\/replace\/value",
+                            "description": "http-host\/request\/replace\/value"
+                        },
+                        {
+                            "value": "http-referer\/request\/insert\/value",
+                            "description": "http-referer\/request\/insert\/value"
+                        },
+                        {
+                            "value": "http-referer\/request\/remove",
+                            "description": "http-referer\/request\/remove"
+                        },
+                        {
+                            "value": "http-referer\/request\/replace\/value",
+                            "description": "http-referer\/request\/replace\/value"
+                        },
+                        {
+                            "value": "http-reply\/request\/redirect\/location",
+                            "description": "http-reply\/request\/redirect\/location"
+                        },
+                        {
+                            "value": "http-reply\/response\/redirect\/location",
+                            "description": "http-reply\/response\/redirect\/location"
+                        },
+                        {
+                            "value": "http-set-cookie\/response\/insert\/name,domain,path,value",
+                            "description": "http-set-cookie\/response\/insert\/name,domain,path,value"
+                        },
+                        {
+                            "value": "http-set-cookie\/response\/remove\/name",
+                            "description": "http-set-cookie\/response\/remove\/name"
+                        },
+                        {
+                            "value": "http-uri\/response\/replace\/path,query-string,value",
+                            "description": "http-uri\/response\/replace\/path,query-string,value"
+                        },
+                        {
+                            "value": "l7dos\/request\/enable\/from-profile",
+                            "description": "l7dos\/request\/enable\/from-profile"
+                        },
+                        {
+                            "value": "l7dos\/request\/disable",
+                            "description": "l7dos\/request\/disable"
+                        },
+                        {
+                            "value": "log\/request\/write\/message",
+                            "description": "log\/request\/write\/message"
+                        },
+                        {
+                            "value": "log\/response\/write\/message",
+                            "description": "log\/response\/write\/message"
+                        },
+                        {
+                            "value": "request-adapt\/request\/enable\/internal-virtual-server",
+                            "description": "request-adapt\/request\/enable\/internal-virtual-server"
+                        },
+                        {
+                            "value": "request-adapt\/request\/disable",
+                            "description": "request-adapt\/request\/disable"
+                        },
+                        {
+                            "value": "request-adapt\/response\/enable\/internal-virtual-server",
+                            "description": "request-adapt\/response\/enable\/internal-virtual-server"
+                        },
+                        {
+                            "value": "request-adapt\/response\/disable",
+                            "description": "request-adapt\/response\/disable"
+                        },
+                        {
+                            "value": "response-adapt\/request\/enable\/internal-virtual-server",
+                            "description": "response-adapt\/request\/enable\/internal-virtual-server"
+                        },
+                        {
+                            "value": "response-adapt\/request\/disable",
+                            "description": "response-adapt\/request\/disable"
+                        },
+                        {
+                            "value": "response-adapt\/response\/enable\/internal-virtual-server",
+                            "description": "response-adapt\/response\/enable\/internal-virtual-server"
+                        },
+                        {
+                            "value": "request-adapt\/response\/disable",
+                            "description": "request-adapt\/response\/disable"
+                        },
+                        {
+                            "value": "server-ssl\/request\/enable",
+                            "description": "server-ssl\/request\/enable"
+                        },
+                        {
+                            "value": "server-ssl\/request\/disable",
+                            "description": "server-ssl\/request\/disable"
+                        },
+                        {
+                            "value": "tcl\/request\/set-variable\/name,expression",
+                            "description": "tcl\/request\/set-variable\/name,expression"
+                        },
+                        {
+                            "value": "tcl\/response\/set-variable\/name,expression",
+                            "description": "tcl\/response\/set-variable\/name,expression"
+                        },
+                        {
+                            "value": "tcl\/ssl-client-hello\/set-variable\/name,expression",
+                            "description": "tcl\/ssl-client-hello\/set-variable\/name,expression"
+                        },
+                        {
+                            "value": "tcl\/ssl-server-handshake\/set-variable\/name,expression",
+                            "description": "tcl\/ssl-server-handshake\/set-variable\/name,expression"
+                        },
+                        {
+                            "value": "tcl\/ssl-server-hello\/set-variable\/name,expression",
+                            "description": "tcl\/ssl-server-hello\/set-variable\/name,expression"
+                        },
+                        {
+                            "value": "tcp-nagle\/request\/enable",
+                            "description": "tcp-nagle\/request\/enable"
+                        },
+                        {
+                            "value": "tcp-nagle\/request\/disable",
+                            "description": "tcp-nagle\/request\/disable"
+                        }
+                        ]
+                    },
+                    {
+                        "name": "Parameter",
+                        "description": "Parameter:",
+                        "displayName": "Parameter",
+                        "isRequired": false,
+                        "provider": ""
+                    }
+                    ],
+                        "description": "L7 Policy: Rules: Action"
+                },
+                {
+                    "name": "feature__easyL4FirewallBlacklist",
+                    "columns": [
+                    {
+                        "name": "CIDRRange",
+                        "description": "CIDR Block:",
+                        "displayName": "CIDRRange",
+                        "isRequired": false,
+                        "provider": ""
+                    }
+                    ],
+                        "description": "Security: Firewall: Static Blacklisted Addresses (CIDR Format)"
+                },
+                {
+                    "name": "feature__easyL4FirewallSourceList",
+                    "columns": [
+                    {
+                        "name": "CIDRRange",
+                        "description": "CIDR Block:",
+                        "displayName": "CIDRRange",
+                        "isRequired": false,
+                        "provider": "0.0.0.0\/0"
+                    }
+                    ],
+                        "description": "Security: Firewall: Static Allowed Source Addresses (CIDR Format)"
+                },
+                {
+                    "name": "monitor__Monitors",
+                    "columns": [
+                    {
+                        "name": "Index",
+                        "description": "Index:",
+                        "displayName": "Index",
+                        "isRequired": false,
+                        "provider": "0"
+                    },
+                    {
+                        "name": "Name",
+                        "description": "Name:",
+                        "displayName": "Name",
+                        "isRequired": false,
+                        "defaultValue": "\/Common\/udp"
+                    },
+                    {
+                        "name": "Type",
+                        "description": "Type:",
+                        "displayName": "Type",
+                        "isRequired": false,
+                        "provider": ""
+                    },
+                    {
+                        "name": "Options",
+                        "description": "Options:",
+                        "displayName": "Options",
+                        "isRequired": false,
+                        "provider": ""
+                    }
+                    ],
+                        "description": "Monitor: Monitor Table"
+                }
+            ]
+        }
+}
