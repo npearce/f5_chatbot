@@ -26,3 +26,6 @@ RUN rm /home/hubot/hubot-scripts.json
 # Add some scripts
 ADD /scripts /home/hubot/scripts
 ADD external-scripts.json /home/hubot/
+
+# Add the iApps and Service Catalog entries
+ADD /iApps /home/hubot/iApps
