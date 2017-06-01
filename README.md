@@ -15,6 +15,12 @@ f5_chatbot will be via the iWorkflow API Gateway, because it is awesome.
 ## REQUIREMENTS
 * Docker
 * A Slack Bot token
+* F5 iWorkflow (Programmable API Gateway)
+* AppSvcs_Integration iApp
+
+* Tested versions:
+  * F5 iWorkflow 2.2.0
+  * AppSvcs_Integration iApp 2.0.004: https://github.com/F5Networks/f5-application-services-integration-iApp/releases/tag/v2.0.004
 
 **Docker:** Did you know you can get Docker CE for Windows/Mac now, too? Go here: https://www.docker.com/community-edition#/download
 
