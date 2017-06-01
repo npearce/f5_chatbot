@@ -1,0 +1,14 @@
+{
+  "iApp_ver" : "v2.0.004",
+  "iApp_loc" : "../iApps/iWorkflow_json_payloads_v2.0.004/",
+  "iApp_services" : [
+    "f5-http-lb_v2.0.004.json",
+    "f5-fasthttp-lb_v2.0.004.json",
+    "f5-https-waf-lb_v2.0.004.json",
+    "f5-https-offload_v2.0.004.json",
+    "f5-http-url-routing-lb_v2.0.004.json",
+    "f5-fastl4-udp-lb_v2.0.004.json",
+    "f5-fastl4-tcp-lb_v2.0.004.json"
+  ],
+  "iApp_file" : "iWorkflow_appsvcs_integration_v2.0.004.json"
+}
