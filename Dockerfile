@@ -25,3 +25,5 @@ RUN rm /home/hubot/hubot-scripts.json
 # Add some scripts
 ADD /scripts /home/hubot/scripts
 ADD external-scripts.json /home/hubot/
+ADD https://github.com/F5Networks/f5-application-services-integration-iApp/releases/download/v2.0.004/iWorkflow_json_payloads_v2.0.004.zip /home/hubot
+RUN unzip iWorkflow_json_payloads_v2.0.004.zip && rm iWorkflow_json_payloads_v2.0.004.zip
