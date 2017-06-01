@@ -17,7 +17,7 @@ module.exports = (robot) ->
     #Respond with all the variables (bot not the password)
     res.reply "help - prints this help\n\n
 For more detailed help, try 'help <command>'.\n\n
-env - show what settings have been set.\n
+show config - show what settings have been set.\n
 set address - specifies the management IP addres you are going to be owkring with.\n
 get token - Retrieve an auth token from iWokflow so we don't need to stor your password\n
 list tenants - Returns a list of Tenant assigments associate with the authenticated user.\n
