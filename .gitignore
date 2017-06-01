@@ -6,3 +6,5 @@ scripts/example.coffee
 dev_notes-no_commit.md
 
 scripts/f5_iworkflow_dev.coffee
+
+*.zip
