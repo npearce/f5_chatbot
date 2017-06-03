@@ -35,7 +35,7 @@ Tenant Commands:
   \n\nNOTE: The following commands require 'set address' and 'get token' before executing:\n\n
   (show|list) services"
 
-  robot.respond /help (*) config/i, (res) ->
+  robot.respond /help show config/i, (res) ->
     res.reply "The defauls for the running config are 'null'. Setting these
     environment variables (username/password/token, Managmenet IP Address, etc)
     enables communication with the iWorkflow platform. Minimum requirements for
