@@ -10,6 +10,6 @@
     "f5-fastl4-udp-lb_v2.0.004.json",
     "f5-fastl4-tcp-lb_v2.0.004.json"
   ],
-  "iApp_file" : "iWorkflow_appsvcs_integration_v2.0.004.json"
+  "iApp_file" : "iWorkflow_appsvcs_integration_v2.0.004.json",
   "iApp_name" : "appsvcs_integration_v2.0.004"
 }
