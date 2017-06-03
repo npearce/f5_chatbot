@@ -24,3 +24,16 @@ How to do this:
   immediate areas of influence'.
 
 4. You are now 'winning at life'
+
+
+## script updates!
+
+Yes, we are always looking for more functionality. That's all I've really got to
+say about that.
+
+## Updating the iApps
+
+Nuke and Page, baby!
+1. Fork the build.
+2. Update `./iApps/`
+3. Update iApps.json
