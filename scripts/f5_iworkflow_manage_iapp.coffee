@@ -174,7 +174,7 @@ module.exports = (robot) ->
           try
             res.reply resp.statusCode + " - " + resp.statusMessage
             jp_body = JSON.parse body
-            res.reply "Service Template #{jp_body.templateName}\n\t - Installed - #{resp.statusCode} - #{resp.statusMessage}"
+            res.reply "Service Template #{jp_body.templateName} - Installed - #{resp.statusCode} - #{resp.statusMessage}"
           catch error
            res.send "Ran into an error parsing JSON :("
            return
