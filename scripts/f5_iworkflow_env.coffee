@@ -10,6 +10,7 @@
 #
 
 module.exports = (robot) ->
+
   DEBUG = false
 
 # Do something with errors
