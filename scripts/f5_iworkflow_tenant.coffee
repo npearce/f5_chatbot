@@ -11,7 +11,7 @@
 
 module.exports = (robot) ->
 
-######## BEGIN iWorkflow Reads ########
+######## BEGIN Show Services and VIP/Pools ########
 
 #TODO Iterate through a users 'multiple' tenant associations...
 
@@ -78,4 +78,100 @@ module.exports = (robot) ->
 
               res.reply " - Listener: #{vip}:#{port}\n - Servers: #{pool_members}"
 
-######## END iWorkflow Reads ########
+######## END Show Services and VIP/Pools ########
+
+
+######## BEGIN Show Service Templates ########
+
+  # List/Show the Services Templates installed on iWorkflow
+  robot.respond /(list|show) service templates/i, (res) ->
+
+    # Use the config
+    iwf_addr = robot.brain.get('iwf_addr')
+    iwf_token = robot.brain.get('iwf_token')
+
+#    res.reply "Reading Service Templates on: #{iwf_addr}"
+
+    options = rejectUnauthorized: false #ignore self-signed certs
+
+    robot.http("https://#{iwf_addr}/mgmt/cm/cloud/tenant/templates/iapp/", options)
+      .headers('X-F5-Auth-Token': iwf_token, 'Accept': "application/json")
+      .get() (err, resp, body) ->
+        if err
+          res.reply "Encountered an error :( #{err}"
+          return
+
+        data = JSON.parse body
+        for i of data.items
+          name = data.items[i].name
+          res.reply "\tService Templates: #{name}"
+
+######## END Show Service Templates ########
+
+
+######## BEGIN Show Cloud Connector UUID ########
+
+# Required to deploy a new L4 - L7 Service
+
+  # List/Show 'this' tenants Clouds and their UUIDs
+  robot.respond /(list|show) clouds/i, (res) ->
+
+    # Use the config
+    iwf_addr = robot.brain.get('iwf_addr')
+    iwf_token = robot.brain.get('iwf_token')
+    iwf_tenant = robot.brain.get('iwf_tenant')
+
+    if !iwf_tenant?
+      res.reply "You must use 'set tenant <tenant_name>' before executing this command."
+      return
+
+    options = rejectUnauthorized: false #ignore self-signed certs
+
+    robot.http("https://#{iwf_addr}/mgmt/cm/cloud/tenants/#{iwf_tenant}/connectors/", options)
+      .headers('X-F5-Auth-Token': iwf_token, 'Accept': "application/json")
+      .get() (err, resp, body) ->
+        if err
+          res.reply "Encountered an error :( #{err}"
+          return
+
+        data = JSON.parse body
+        for i of data.items
+          name = data.items[i].name
+          uuid = data.items[i].connectorId
+          res.reply "Cloud: #{name}, UUID: #{uuid}"
+
+
+######## END Show Cloud Connector UUID ########
+
+
+
+######## BEGIN Show Service Template Example ########
+
+# Requires user specify a template.
+
+  # List/Show the Services Templates installed on iWorkflow
+  robot.respond /(list|show) service template example (.*)/i, (res) ->
+
+    # Use the config
+    iwf_addr = robot.brain.get('iwf_addr')
+    iwf_token = robot.brain.get('iwf_token')
+    console.log "res.match[1]: #{res.match[1]}"
+
+#    res.reply "Reading Service Templates on: #{iwf_addr}"
+
+    options = rejectUnauthorized: false #ignore self-signed certs
+
+    robot.http("https://#{iwf_addr}/mgmt/cm/cloud/tenant/templates/iapp/#{res.match[1]}", options)
+      .headers('X-F5-Auth-Token': iwf_token, 'Accept': "application/json")
+      .get() (err, resp, body) ->
+        if err
+          res.reply "Encountered an error :( #{err}"
+          return
+
+        data = JSON.parse body
+        for i of data.items
+          name = data.items[i].templateName
+          res.reply "\tService Templates: #{name}"
+
+
+######## END Show Service Template Example ########
