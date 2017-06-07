@@ -18,22 +18,33 @@ module.exports = (robot) ->
     res.reply "help - prints this help\n\n
 For more detailed help, try 'help <command>'.\n\n
 
-Common Commands:
+Common Commands (require for all operations):
   (show|list) config - show what settings have been set.\n
-  set address - specifies the management IP addres you are going to be owkring with.\n
-  set token - Retrieve an auth token from iWokflow so we don't need to stor your password\n
-
+  set address <ip_address> - specifies the management IP addres you are going to be working with.\n
+  get token <username> <password> - Retrieve an auth token from iWokflow so we don't need to store your password\n\n\n
+  set tenant <tenant_name> - specifies which tenant the following commands will work against. Required for users associated with multiple tennats.\n\n
 
 Administrative Commands:
-  (show|list) available iapps
-  (show|list) installed iapps
-  install iapps <username> <password> - installs AppVcs_Integration iApp and Service Templates onto iWorkflow
+  (show|list) available iapps - show the iApps available to install on iWorkflow.
+  (show|list) installed iapps - show the iApps already installed on iWorkflow.
+  (show|list) available service templates - show the service templates available to install on iWorkflow.
+  (show|list) installed service templates - show the service templates already installed on iWorkflow.\n\n
+
+  WARNING: The following commands requires 'admin' credentials.
+  install iapps - Installs the AppSvcs_Integration iApp shipping/tested with f5_chatbot
+  install service templates - Installs the service templates tested and shipping with the AppSvcs_Integration iApp.\n\n
 
 Tenant Commands:
+  \n\nNOTE: The following commands require 'set tenant' before executing:\n\n
   (show|list) tenants - Returns a list of Tenant assigments associate with the authenticated user.\n
-  set tenant - Specify which of the users associated tenants you with to work with. A user can have multiple Tenant assignments.\n
-  \n\nNOTE: The following commands require 'set address' and 'get token' before executing:\n\n
-  (show|list) services"
+  set tenant <tenant_name> - Specify which of the users associated tenants you with to work with. A user can have multiple Tenant assignments.\n
+  (show|list) deployed services
+  (show|list) services templates
+  (show|list) service template example <service_template_name> - get an example of a
+  deploy service <JSON_Input> - deploys a service to a BIG-IP device. Requires Service Template input."
+
+
+## More detailed help
 
   robot.respond /help show config/i, (res) ->
     res.reply "The defauls for the running config are 'null'. Setting these
