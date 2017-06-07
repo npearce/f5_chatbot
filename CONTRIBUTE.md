@@ -37,3 +37,12 @@ Nuke and Page, baby!
 1. Fork the build.
 2. Update `./iApps/`
 3. Update iApps.json
+
+
+# Required
+
+Ok, this things needs:
+
+1. Debug mode: `set debug (info|debug|world)` should then start dumping to console.log
+2. A launch script to grab the latest AppVcs_Integration iApp and update iApps.json?
+3. Tweet F5 CTO Ryan Kearny every time an environment is Robot-built?!
