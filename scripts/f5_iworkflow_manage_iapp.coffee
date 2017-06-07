@@ -172,7 +172,6 @@ module.exports = (robot) ->
             return
 
           try
-            res.reply resp.statusCode + " - " + resp.statusMessage
             jp_body = JSON.parse body
             res.reply "Service Template #{jp_body.templateName} - Installed - #{resp.statusCode} - #{resp.statusMessage}"
           catch error
@@ -224,7 +223,7 @@ module.exports = (robot) ->
         long_name = iapps.iApp_service_templates[i]
         short_name = long_name.split "_v2.0.004.json"  # drop the extension
 
-        res.reply "Deleting: #{short_name[0]}"
+#        res.reply "Deleting: #{short_name[0]}"
 
         # Perform the deletion (DELETE to /iapps)
         options = rejectUnauthorized: false #ignore self-signed certs
@@ -236,12 +235,12 @@ module.exports = (robot) ->
               res.reply "Encountered an error :( #{err}"
               return
 
-            if resp.statusCode isnt 200
+            if resp.statusCode is 200
+              res.reply "Service Template #{iapps.iApp_service_templates[i]} deleted!"
+            else
               res.reply "Something went wrong :( RESP: #{resp.statusCode} #{resp.statusMessage}"
               console.log "Something went wrong :( BODY: #{body}"
-#              return
-
-            res.reply "Service Template #{iapps.iApp_service_templates[i]} deleted! i is: #{i}"
+              return
 
 
 ######## END iApp delete ########
