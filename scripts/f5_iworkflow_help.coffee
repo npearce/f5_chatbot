@@ -19,12 +19,12 @@ module.exports = (robot) ->
 For more detailed help, try 'help <command>'.\n\n
 
 Common Commands (require for all operations):
-  (show|list) config - show what settings have been set.\n
-  set address <ip_address> - specifies the management IP addres you are going to be working with.\n
-  get token <username> <password> - Retrieve an auth token from iWokflow so we don't need to store your password\n\n\n
-  set tenant <tenant_name> - specifies which tenant the following commands will work against. Required for users associated with multiple tennats.\n\n
+  (show|list) config - show what operating settings have been defined.
+  set address <ip_address> - specifies the management IP address you wish to work with.
+  get token <username> <password> - Retrieve an auth token from iWokflow so we don't need to store your password.
+  set tenant <tenant_name> - specifies which iWorkflow tenant the following commands will apply to. Required for users associated with multiple tennats.\n\n
 
-Administrative Commands:
+Administrator/Provider Commands:
   (show|list) available iapps - show the iApps available to install on iWorkflow.
   (show|list) installed iapps - show the iApps already installed on iWorkflow.
   (show|list) available service templates - show the service templates available to install on iWorkflow.
@@ -36,12 +36,13 @@ Administrative Commands:
 
 Tenant Commands:
   \n\nNOTE: The following commands require 'set tenant' before executing:\n\n
-  (show|list) tenants - Returns a list of Tenant assigments associate with the authenticated user.\n
-  set tenant <tenant_name> - Specify which of the users associated tenants you with to work with. A user can have multiple Tenant assignments.\n
+  (show|list) tenants - Returns a list of Tenant assigments associate with the authenticated user.
+  set tenant <tenant_name> - Specify which of the users associated tenants you with to work with. A user can have multiple Tenant assignments.
   (show|list) deployed services
   (show|list) services templates
-  (show|list) service template example <service_template_name> - get an example of a
-  deploy service <JSON_Input> - deploys a service to a BIG-IP device. Requires Service Template input."
+  (show|list) service template example <service_template_name> - get the example JSON post to deploy a service. Use '[list|show] service templates' to view what is installed.
+  deploy service <encoded_JSON_Input> - deploys a service to a BIG-IP device. Requires 'URLencoded Service Template input.
+  encode json - returns a URL list for free sites that will URL encode your JSON."
 
 
 ## More detailed help
