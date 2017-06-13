@@ -9,6 +9,8 @@
 #   Running on Docker container/alpine linux
 #
 
+iapps = require "../iApps/iApps.json"
+
 module.exports = (robot) ->
 
 ######## BEGIN Show Services and VIP/Pools ########
@@ -140,38 +142,128 @@ module.exports = (robot) ->
           uuid = data.items[i].connectorId
           res.reply "Cloud: #{name}, UUID: #{uuid}"
 
-
 ######## END Show Cloud Connector UUID ########
-
 
 
 ######## BEGIN Show Service Template Example ########
 
 # Requires user specify a template.
 
-  # List/Show the Services Templates installed on iWorkflow
+  # List/Show the Service Template Example for a specific template
   robot.respond /(list|show) service template example (.*)/i, (res) ->
+
+    # first we construct the 'sample' name
+#    console.log "res.match[2]: #{res.match[2]}"
+    example_file = res.match[2]
+#    console.log "example_file: #{example_file}"
+    example_path = "#{iapps.iApp_loc}tenant-service-samples/#{example_file}-service_#{iapps.iApp_ver}.json"
+#    console.log "example_path: #{example_path}"
+
+    # It fetches the data from the path
+    example_data = require "#{example_path}"
+    example_data_stringified = JSON.stringify(example_data, ' ', '\t')
+
+    res.reply "#{example_file} example:\n#{example_data_stringified}"
+
+######## END Show Service Template Example ########
+
+######## BEGIN Deploy Service ########
+
+# Requires user specify a template.
+
+  # Deploy a Service Template. Requires URLencoded JSON data (for hubot)
+  robot.respond /deploy service ((.*|\s*)+)/i, (res) ->
+
+    console.log "res.match[0]: #{res.match[0]}"
+    console.log "res.match[1]: #{res.match[1]}"
+    console.log "res.match[2]: #{res.match[2]}"
+    console.log "res.match[3]: #{res.match[3]}"
+    console.log "res.match[4]: #{res.match[4]}"
 
     # Use the config
     iwf_addr = robot.brain.get('iwf_addr')
     iwf_token = robot.brain.get('iwf_token')
-    console.log "res.match[1]: #{res.match[1]}"
+    iwf_tenant = robot.brain.get('iwf_tenant')
 
-#    res.reply "Reading Service Templates on: #{iwf_addr}"
+    if !iwf_tenant?
+      res.reply "You must use 'set tenant <tenant_name>' before executing this command."
+      return
+
+    service_input = res.match[1]
+#    decoded_input = decodeURIComponent(service_input)
+    decoded_input = decodeURIComponent service_input.replace(/\+/g, '%20')
+    console.log "decoded_input: #{decoded_input}"
+#    post_data_stringify = JSON.stringify decoded_input
+#    console.log "post_data_stringify: #{post_data_stringify}"
+#    decoded
 
     options = rejectUnauthorized: false #ignore self-signed certs
 
-    robot.http("https://#{iwf_addr}/mgmt/cm/cloud/tenant/templates/iapp/#{res.match[1]}", options)
-      .headers('X-F5-Auth-Token': iwf_token, 'Accept': "application/json")
-      .get() (err, resp, body) ->
+    robot.http("https://#{iwf_addr}/mgmt/cm/cloud/tenants/#{iwf_tenant}/services/iapp", options)
+      .headers("Content-Type": "application/json", 'X-F5-Auth-Token': iwf_token)
+      .post(decoded_input) (err, resp, body) ->
+
+        # Handle error
         if err
           res.reply "Encountered an error :( #{err}"
           return
+        if resp.statusCode isnt 200
+          res.reply "Something went wrong :( RESP: #{resp.statusCode} #{resp.statusMessage}"
+          console.log "Something went wrong :( BODY: #{body}"
+          return
 
-        data = JSON.parse body
-        for i of data.items
-          name = data.items[i].templateName
-          res.reply "\tService Templates: #{name}"
+        try
+          res.reply resp.statusCode + " - " + resp.statusMessage
+#          jp_body = JSON.parse body
+          res.reply "body: #{body}"
+#          res.reply "iApp #{jp_body.name} - Installed - #{resp.statusCode} - #{resp.statusMessage}"
+        catch error
+         res.send "Ran into an error parsing JSON :("
+         return
 
 
-######## END Show Service Template Example ########
+######## END Deploy Service ########
+
+
+######## BEGIN Delete Service ########
+
+# Requires user specify a service, obtained using '[botname] list services'.
+
+  # List/Show the Service Template Example for a specific template
+  robot.respond /delete service (.*)/i, (res) ->
+
+    console.log "res.match[0]: #{res.match[0]}"
+    console.log "res.match[1]: #{res.match[1]}"
+    console.log "res.match[2]: #{res.match[2]}"
+
+    # Use the config
+    iwf_addr = robot.brain.get('iwf_addr')
+    iwf_token = robot.brain.get('iwf_token')
+    iwf_tenant = robot.brain.get('iwf_tenant')
+
+    if !iwf_tenant?
+      res.reply "You must use 'set tenant <tenant_name>' before executing this command."
+      return
+
+    options = rejectUnauthorized: false #ignore self-signed certs
+
+    robot.http("https://#{iwf_addr}/mgmt/cm/cloud/tenants/#{iwf_tenant}/services/iapp/#{res.match[1]}", options)
+      .headers("Content-Type": "application/json", 'X-F5-Auth-Token': iwf_token)
+      .delete() (err, resp, body) ->
+
+        # Handle error
+        if err
+          res.reply "Encountered an error :( #{err}"
+          return
+        if resp.statusCode isnt 200
+          res.reply "Something went wrong :( RESP: #{resp.statusCode} #{resp.statusMessage}"
+          console.log "Something went wrong :( BODY: #{body}"
+          return
+
+        try
+          res.reply resp.statusCode + " - " + resp.statusMessage
+        catch error
+         res.send "Ran into an error parsing JSON :("
+         return
+
+######## END Delete Service ########
