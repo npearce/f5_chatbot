@@ -267,3 +267,11 @@ module.exports = (robot) ->
          return
 
 ######## END Delete Service ########
+
+######## BEGIN Encode JSON ########
+
+  # Instructions for converting your JSON data into a single encoded string, to play nice with hubot.
+  robot.respond /encode json/i, (res) ->
+    res.reply "Go here:\n https://www.freeformatter.com/url-encoder.html \nPaste your JSON into the text box, click 'encode'. Use this encoded string with the 'deploy service <encoded_JSON_Input>' command."
+
+######## END Encode JSON ########
