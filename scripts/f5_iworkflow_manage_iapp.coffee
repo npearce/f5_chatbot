@@ -18,17 +18,10 @@ module.exports = (robot) ->
 
   robot.respond /(list|show) available iapps/i, (res) ->
 
-    # Use the config
-    iwf_addr = robot.brain.get('iwf_addr')
-    iwf_token = robot.brain.get('iwf_token')
-
     res.reply "iApp: #{iapps.iApp_file}"
 
-  robot.respond /(list|show) available service templates/i, (res) ->
 
-    # Use the config
-    iwf_addr = robot.brain.get('iwf_addr')
-    iwf_token = robot.brain.get('iwf_token')
+  robot.respond /(list|show) available service templates/i, (res) ->
 
     res.reply "iApp: #{iapps.iApp_file}"
     for i of iapps.iApp_service_templates
