@@ -24,6 +24,9 @@ module.exports = (robot) ->
   robot.hear /life/i, (res) ->
     res.send "42"
 
+  robot.respond /(ping|hodor)/i, (res) ->
+    res.send "hodor"
+
 ######## BEGIN Environment Setup ########
 
 # Show know configuration:
