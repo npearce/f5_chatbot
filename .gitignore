@@ -8,3 +8,5 @@ dev_notes-no_commit.md
 scripts/f5_iworkflow_dev.coffee
 
 *.zip
+
+dev_notes.md
