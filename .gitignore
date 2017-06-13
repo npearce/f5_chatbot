@@ -12,3 +12,5 @@ scripts/f5_iworkflow_dev.coffee
 dev_notes.md
 
 scripts/f5_iworkflow_functions.coffee
+
+scripts/f5_iworkflow_deploy.coffee
