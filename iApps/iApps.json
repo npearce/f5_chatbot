@@ -10,6 +10,15 @@
     "f5-fastl4-udp-lb_v2.0.004.json",
     "f5-fastl4-tcp-lb_v2.0.004.json"
   ],
+  "service_template_examples" : [
+    "f5-http-lb-service_v2.0.004.json",
+    "f5-fasthttp-lb-service_v2.0.004.json",
+    "f5-https-waf-lb-service_v2.0.004.json",
+    "f5-https-offload-service_v2.0.004.json",
+    "f5-http-url-routing-lb-service_v2.0.004.json",
+    "f5-fastl4-udp-lb-service_v2.0.004.json",
+    "f5-fastl4-tcp-lb-service_v2.0.004.json"
+  ],
   "iApp_file" : "iWorkflow_appsvcs_integration_v2.0.004.json",
   "iApp_name" : "appsvcs_integration_v2.0.004"
 }
