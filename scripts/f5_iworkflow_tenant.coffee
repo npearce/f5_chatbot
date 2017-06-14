@@ -9,27 +9,27 @@
 #   Running on Docker container/alpine linux
 #
 
-iapps = require "../iApps/iApps.json"
-
 module.exports = (robot) ->
+
+  iapps = require "../iApps/iApps.json"
+  DEBUG = false
+  OPTIONS = rejectUnauthorized: false #ignore self-signed certs
+
 
 ######## BEGIN Show Services and VIP/Pools ########
 
-#TODO Iterate through a users 'multiple' tenant associations...
-
 # Get Services
   robot.respond /(list|show) services/i, (res) ->
-    iwf_addr = robot.brain.get('iwf_addr')
-    iwf_token = robot.brain.get('iwf_token')
-    iwf_tenant = robot.brain.get('iwf_tenant')
-    if !iwf_tenant?
+    IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_TOKEN = robot.brain.get('IWF_TOKEN')
+    IWF_TENANT = robot.brain.get('IWF_TENANT')
+    if !IWF_TENANT?
       res.reply "You must set a tenant to work with. Refer to \'help list tenants\' and \'help set tenant\'"
       return
 
 # Get a list of the Deployed services for the specified iWorkflow Tenant
-    options = rejectUnauthorized: false #ignore self-signed certs
-    robot.http("https://#{iwf_addr}/mgmt/cm/cloud/tenants/#{iwf_tenant}/services/iapp", options)
-      .headers('X-F5-Auth-Token': iwf_token, Accept: 'application/json')
+    robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenants/#{IWF_TENANT}/services/iapp", OPTIONS)
+      .headers('X-F5-Auth-Token': IWF_TOKEN, Accept: 'application/json')
       .get() (err, resp, body) ->
         if err
           res.reply "Encountered an error :( #{err}"
@@ -42,7 +42,7 @@ module.exports = (robot) ->
           res.reply "Something went wrong. Has your token expired"
 
         else if data.items.length < "1"
-          res.reply "#{iwf_tenant} has no services"
+          res.reply "#{IWF_TENANT} has no services"
 
 # Grab the name and template for each service.
         for i of data.items
@@ -51,8 +51,8 @@ module.exports = (robot) ->
           res.reply "Service: #{service}\nTemplate: #{template}"
 
 # Get the VIP details for each service
-          robot.http("https://#{iwf_addr}/mgmt/cm/cloud/tenants/#{iwf_tenant}/services/iapp/#{service}", options)
-            .headers('X-F5-Auth-Token': iwf_token, Accept: 'application/json')
+          robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenants/#{IWF_TENANT}/services/iapp/#{service}", OPTIONS)
+            .headers('X-F5-Auth-Token': IWF_TOKEN, Accept: 'application/json')
             .get() (err, resp, body) ->
               if err
                 res.reply "Encountered an error :( #{err}"
@@ -89,15 +89,15 @@ module.exports = (robot) ->
   robot.respond /(list|show) service templates/i, (res) ->
 
     # Use the config
-    iwf_addr = robot.brain.get('iwf_addr')
-    iwf_token = robot.brain.get('iwf_token')
+    IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_TOKEN = robot.brain.get('IWF_TOKEN')
 
-#    res.reply "Reading Service Templates on: #{iwf_addr}"
+#    res.reply "Reading Service Templates on: #{IWF_ADDR}"
 
-    options = rejectUnauthorized: false #ignore self-signed certs
+    OPTIONS = rejectUnauthorized: false #ignore self-signed certs
 
-    robot.http("https://#{iwf_addr}/mgmt/cm/cloud/tenant/templates/iapp/", options)
-      .headers('X-F5-Auth-Token': iwf_token, 'Accept': "application/json")
+    robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenant/templates/iapp/", OPTIONS)
+      .headers('X-F5-Auth-Token': IWF_TOKEN, 'Accept': "application/json")
       .get() (err, resp, body) ->
         if err
           res.reply "Encountered an error :( #{err}"
@@ -119,18 +119,16 @@ module.exports = (robot) ->
   robot.respond /(list|show) clouds/i, (res) ->
 
     # Use the config
-    iwf_addr = robot.brain.get('iwf_addr')
-    iwf_token = robot.brain.get('iwf_token')
-    iwf_tenant = robot.brain.get('iwf_tenant')
+    IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_TOKEN = robot.brain.get('IWF_TOKEN')
+    IWF_TENANT = robot.brain.get('IWF_TENANT')
 
-    if !iwf_tenant?
+    if !IWF_TENANT?
       res.reply "You must use 'set tenant <tenant_name>' before executing this command."
       return
 
-    options = rejectUnauthorized: false #ignore self-signed certs
-
-    robot.http("https://#{iwf_addr}/mgmt/cm/cloud/tenants/#{iwf_tenant}/connectors/", options)
-      .headers('X-F5-Auth-Token': iwf_token, 'Accept': "application/json")
+    robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenants/#{IWF_TENANT}/connectors/", options)
+      .headers('X-F5-Auth-Token': IWF_TOKEN, 'Accept': "application/json")
       .get() (err, resp, body) ->
         if err
           res.reply "Encountered an error :( #{err}"
@@ -181,11 +179,11 @@ module.exports = (robot) ->
     console.log "res.match[4]: #{res.match[4]}"
 
     # Use the config
-    iwf_addr = robot.brain.get('iwf_addr')
-    iwf_token = robot.brain.get('iwf_token')
-    iwf_tenant = robot.brain.get('iwf_tenant')
+    IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_TOKEN = robot.brain.get('IWF_TOKEN')
+    IWF_TENANT = robot.brain.get('IWF_TENANT')
 
-    if !iwf_tenant?
+    if !IWF_TENANT?
       res.reply "You must use 'set tenant <tenant_name>' before executing this command."
       return
 
@@ -197,10 +195,8 @@ module.exports = (robot) ->
 #    console.log "post_data_stringify: #{post_data_stringify}"
 #    decoded
 
-    options = rejectUnauthorized: false #ignore self-signed certs
-
-    robot.http("https://#{iwf_addr}/mgmt/cm/cloud/tenants/#{iwf_tenant}/services/iapp", options)
-      .headers("Content-Type": "application/json", 'X-F5-Auth-Token': iwf_token)
+    robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenants/#{IWF_TENANT}/services/iapp", OPTIONS)
+      .headers("Content-Type": "application/json", 'X-F5-Auth-Token': IWF_TOKEN)
       .post(decoded_input) (err, resp, body) ->
 
         # Handle error
@@ -237,18 +233,16 @@ module.exports = (robot) ->
     console.log "res.match[2]: #{res.match[2]}"
 
     # Use the config
-    iwf_addr = robot.brain.get('iwf_addr')
-    iwf_token = robot.brain.get('iwf_token')
-    iwf_tenant = robot.brain.get('iwf_tenant')
+    IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_TOKEN = robot.brain.get('IWF_TOKEN')
+    IWF_TENANT = robot.brain.get('IWF_TENANT')
 
-    if !iwf_tenant?
+    if !IWF_TENANT?
       res.reply "You must use 'set tenant <tenant_name>' before executing this command."
       return
 
-    options = rejectUnauthorized: false #ignore self-signed certs
-
-    robot.http("https://#{iwf_addr}/mgmt/cm/cloud/tenants/#{iwf_tenant}/services/iapp/#{res.match[1]}", options)
-      .headers("Content-Type": "application/json", 'X-F5-Auth-Token': iwf_token)
+    robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenants/#{IWF_TENANT}/services/iapp/#{res.match[1]}", OPTIONS)
+      .headers("Content-Type": "application/json", 'X-F5-Auth-Token': IWF_TOKEN)
       .delete() (err, resp, body) ->
 
         # Handle error
