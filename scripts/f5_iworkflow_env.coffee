@@ -11,7 +11,8 @@
 
 module.exports = (robot) ->
 
-  DEBUG = false
+  DEBUG = true
+  OPTIONS = rejectUnauthorized: false #ignore self-signed certs
 
 # Do something with errors
   robot.error (err, res) ->
@@ -31,50 +32,53 @@ module.exports = (robot) ->
 
 # Show know configuration:
   robot.respond /(list|show) config/i, (res) ->
-    #Respond with all the variables (bot not the password)
-    iwf_addr = robot.brain.get 'iwf_addr'
-    iwf_username = robot.brain.get 'iwf_username'
-    iwf_token = robot.brain.get 'iwf_token'
-    iwf_tenant = robot.brain.get 'iwf_tenant'
-    res.reply "iWorkflow Address: #{iwf_addr} \niWorkflow Username: #{iwf_username}\nAuth Token: #{iwf_token}\niWorkflow Tenant: #{iwf_tenant}\n"
 
+    #Respond with all the variables (bot not the password)
+    IWF_ADDR = robot.brain.get 'IWF_ADDR'
+    IWF_USERNAME = robot.brain.get 'IWF_USERNAME'
+    IWF_TOKEN = robot.brain.get 'IWF_TOKEN'
+    IWF_TENANT = robot.brain.get 'IWF_TENANT'
+    IWF_ROLE = robot.brain.get 'IWF_ROLE'
+
+    res.reply "iWorkflow Address: #{IWF_ADDR}\niWorkflow Username: #{IWF_USERNAME}\niWorkflow Role (Admin/Tenant): #{IWF_ROLE}\nAuth Token: #{IWF_TOKEN}\niWorkflow Tenant: #{IWF_TENANT}\n"
 
 # Store the iWorkflow IP Address in a variable for use
   robot.respond /set address (.*)/i, (res) ->
 
     #Take the hostname/ipAddress from slack and 'set.brain.iwfHost
-    iwf_addr = res.match[1]
-    robot.brain.set 'iwf_addr', iwf_addr
-    res.reply "Address stored: #{iwf_addr}\n Testing connection..."
+    IWF_ADDR = res.match[1]
+    robot.brain.set 'IWF_ADDR', IWF_ADDR
+    res.reply "Address stored: #{IWF_ADDR}\n Testing connection..."
 
     # Testing connectivity
-    options = rejectUnauthorized: false #ignore self-signed certs
-    robot.http("https://#{iwf_addr}/mgmt/toc", options)
+    robot.http("https://#{IWF_ADDR}/mgmt/toc", OPTIONS)
       .headers(Accept: 'application/json')
       .get() (err, resp, body) ->
 
         if err
           res.reply "Encountered an error :( #{err}"
           return
+
         if resp.statusCode isnt 200
           res.reply "Something went wrong :( #{resp}"
           return
-
-        # Respond with the status
-        res.reply "Response from #{iwf_addr}:  #{resp.statusCode} - #{resp.statusMessage}"
+        else
+          # Respond with the status
+          res.reply "Response from #{IWF_ADDR}:  #{resp.statusCode} - #{resp.statusMessage}"
 
 
 # Get a token, so we don't have to store user credentials
   robot.respond /get token (.*) (.*)/i, (res) ->
 
     # Store the username for '(list|show) config'
-    robot.brain.set 'iwf_username', res.match[1]
+    robot.brain.set 'IWF_USERNAME', res.match[1]
 
     # Use the iWorkflow management address provided earlier
-    iwf_addr = robot.brain.get('iwf_addr')
+    IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
 
     #If we have no iWorkflow management address, advise and go no further
-    if !iwf_addr?
+    if !IWF_ADDR?
       res.reply "You must specify a management ip address\nTry \"set address <x.x.x.x>\" before requesting a token"
       return
     # Check we get both a username and password after the 'get token' command
@@ -90,8 +94,7 @@ module.exports = (robot) ->
     })
 
     # Perform the POST to authn/login
-    options = rejectUnauthorized: false #ignore self-signed certs
-    robot.http("https://#{iwf_addr}/mgmt/shared/authn/login", options)
+    robot.http("https://#{IWF_ADDR}/mgmt/shared/authn/login", OPTIONS)
       .post(post_data) (err, resp, body) ->
 
         # Handle error
@@ -103,27 +106,25 @@ module.exports = (robot) ->
           return
 
         try
-          resp_body = JSON.parse body
+          jp_body = JSON.parse body
         catch error
          res.send "Ran into an error parsing JSON :("
          return
 
-        if !resp_body.token.token?
-          res.reply "No token."
+        if !jp_body.token.token?
+          res.reply "No token found."
         else
-          iwf_token = resp_body.token.token
-          iwf_token_timeout = resp_body.token.timeout
-          robot.brain.set 'iwf_token', iwf_token
-#          res.reply "Token: #{iwf_token}\n Increasing token timeout from #{iwf_token_timeout} to 36000 seconds"
+          IWF_TOKEN = jp_body.token.token
+          IWF_TOKEN_TIMEOUT = jp_body.token.timeout
+          robot.brain.set 'IWF_TOKEN', IWF_TOKEN
 
           # Increase auth token timeout
           patch_token = JSON.stringify({
             timeout: '36000'
           })
 
-          options = rejectUnauthorized: false #ignore self-signed certs
-          robot.http("https://#{iwf_addr}/mgmt/shared/authz/tokens/#{iwf_token}", options)
-            .headers('X-F5-Auth-Token': iwf_token, Accept: 'application/json')
+          robot.http("https://#{IWF_ADDR}/mgmt/shared/authz/tokens/#{IWF_TOKEN}", OPTIONS)
+            .headers('X-F5-Auth-Token': IWF_TOKEN, Accept: 'application/json')
             .patch(patch_token) (err, resp, body) ->
 
               # Handle error
@@ -135,58 +136,59 @@ module.exports = (robot) ->
                 return
 
               if resp.statusCode is 200
-                if DEBUG == true
-                  console.log "patch worked: #{resp.statusCode}"
+                if DEBUG then console.log "patch worked: #{resp.statusCode}"
                 try
-                  data = JSON.parse body
+                  jp_body = JSON.parse body
                 catch error
                  res.send "Ran into an error parsing JSON :("
                  return
 
-               res.reply "Token is: #{iwf_token}\n Increased token timeout from #{iwf_token_timeout} to #{data.timeout} seconds."
+               res.reply "Token is: #{IWF_TOKEN}\n Increased token timeout from #{IWF_TOKEN_TIMEOUT} to #{jp_body.timeout} seconds."
 
+               robot.http("https://#{IWF_ADDR}/mgmt/shared/authz/roles/Administrator", OPTIONS)
+                 .headers('X-F5-Auth-Token': IWF_TOKEN, Accept: 'application/json')
+                 .get() (err, resp, body) ->
+                   if err
+                     res.reply "Encountered an error :( #{err}"
+                     return
+
+                   if resp.statusCode is 200
+                     res.reply "\'#{IWF_USERNAME}\' is an iWorkflow 'Administror'."
+                     robot.brain.set 'IWF_ROLE', 'Administrator'
+                   if resp.statusCode is 401
+                     res.reply "\'#{IWF_USERNAME}\' is an iWorkflow 'Tenant'."
+                     robot.brain.set 'IWF_ROLE', 'Tenant'
 
   # List/Show the authenticated users Tenant assignements
   robot.respond /(list|show) tenants/i, (res) ->
     #Respond with all the variables (bot not the password)
-    iwf_addr = robot.brain.get('iwf_addr')
-    iwf_token = robot.brain.get('iwf_token')
-    options = rejectUnauthorized: false #ignore self-signed certs
+    IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_TOKEN = robot.brain.get('IWF_TOKEN')
 
-#  roles?$select=displayName&$filter=displayName%20eq%20%27*Cloud%20Tenant*%27
-
-    robot.http("https://#{iwf_addr}/mgmt/shared/authz/roles?$select=displayName&$filter=displayName%20eq%20%27*Cloud%20Tenant*%27", options)
-      .headers('X-F5-Auth-Token': iwf_token, Accept: 'application/json')
+    robot.http("https://#{IWF_ADDR}/mgmt/shared/authz/roles?$select=displayName&$filter=displayName%20eq%20%27*Cloud%20Tenant*%27", OPTIONS)
+      .headers('X-F5-Auth-Token': IWF_TOKEN, Accept: 'application/json')
       .get() (err, resp, body) ->
         if err
           res.reply "Encountered an error :( #{err}"
           return
 
-        data = JSON.parse body
-        for i of data.items
-          long_name = data.items[i].displayName
-          short_name = long_name.split(" ")
-          res.reply "Tenant(s): #{short_name[i]}"
+        try
+          jp_body = JSON.parse body
+          for i of jp_body.items
+            long_name = jp_body.items[i].displayName
+            short_name = long_name.split(" ")
+            res.reply "Tenant(s): #{short_name[i]}"
+
+        catch error
+          res.send "Ran into an error parsing JSON :("
+          return
 
 
 # Store the iWorkflow User Tenant to perform actions agains
   robot.respond /set tenant (.*)/i, (res) ->
     #Take the hostname/ipAddress from slack and 'set.brain.iwfHost
-    iwf_tenant = res.match[1]
-    robot.brain.set 'iwf_tenant', iwf_tenant
-    res.reply "Tenant set: #{iwf_tenant}"
+    IWF_TENANT = res.match[1]
+    robot.brain.set 'IWF_TENANT', IWF_TENANT
+    res.reply "Tenant set: #{IWF_TENANT}"
 
 ######## END Environment Setup ########
-
-######## BEGIN Random tests ########
-
-  robot.hear /goog/i, (res) ->
-    robot.http("https://www.google.com")
-      .get() (err, resp, body) ->
-        if err
-          res.send "Encountered an error :( #{err}"
-          return
-
-        res.send "Got back #{body}"
-
-######## END Random tests ########
