@@ -12,7 +12,7 @@
 module.exports = (robot) ->
 
   iapps = require "../iApps/iApps.json" # iApps and Service Templates available to install.
-  DEBUG = true # [true|false] enable per '*.coffee' file.
+  DEBUG = false # [true|false] enable per '*.coffee' file.
   OPTIONS = rejectUnauthorized: false # ignore HTTPS reqiuest self-signed certs notices/errors
 
 

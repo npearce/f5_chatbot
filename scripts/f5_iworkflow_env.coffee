@@ -11,7 +11,7 @@
 
 module.exports = (robot) ->
 
-  DEBUG = true
+  DEBUG = false
   OPTIONS = rejectUnauthorized: false #ignore self-signed certs
 
 # Do something with errors
