@@ -85,7 +85,24 @@ Once loaded, you can run the f5_chatbot by executing:
 
 `HUBOT_SLACK_TOKEN=<your slack robot token goes here> ./bin/hubot -a slack`
 
+# Release Versions
 
+Version: x.y.z
+x = Major Version - Architectural Updates
+y = Minor Version - Feature additions
+z = Patch - Bug fixes.
+
+## Architectural Updates:
+The first number increments with a major change. This could be a change to the container, support for a new container platform, or the addition of support for BIG-IP.
+
+Major Version update may NOT be backwards compatible with all previously supported versions of iWorkflow and BIG-IP. This will be noted in the README.md
+
+## Feature Additions
+A feature addition refers to new commands added to the f5_chatbot robot.
+
+## Bug Fixes
+This may be a fix in unexpected behavior, a change in error handling, or an alteration in debugging capabilities.
+No new features will be added to bug fix releases.  
 
 
 # Commands
