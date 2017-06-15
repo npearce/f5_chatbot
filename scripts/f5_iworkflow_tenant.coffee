@@ -117,6 +117,7 @@ module.exports = (robot) ->
 
     # Use the config
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
@@ -171,6 +172,7 @@ module.exports = (robot) ->
 
     # Use the config
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_TENANT = robot.brain.get('IWF_TENANT')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
@@ -246,6 +248,7 @@ module.exports = (robot) ->
 
     # Use the config
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_TENANT = robot.brain.get('IWF_TENANT')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
@@ -271,6 +274,7 @@ module.exports = (robot) ->
         if err
           res.reply "Encountered an error :( #{err}"
           return
+
         if resp.statusCode isnt 200
           res.reply "Something went wrong :( RESP: #{resp.statusCode} #{resp.statusMessage}"
           if DEBUG then console.log "Something went wrong :( BODY: #{body}"
@@ -278,9 +282,9 @@ module.exports = (robot) ->
 
         try
           res.reply resp.statusCode + " - " + resp.statusMessage
-#          jp_body = JSON.parse body
-          res.reply "body: #{body}"
-#          res.reply "iApp #{jp_body.name} - Installed - #{resp.statusCode} - #{resp.statusMessage}"
+          jp_body = JSON.parse body
+#          res.reply "Deployed: #{jp_body.name}"
+          res.reply "iApp #{jp_body.name} - Installed - #{resp.statusCode} - #{resp.statusMessage}"
         catch error
          res.send "Ran into an error parsing JSON :("
          return
@@ -295,8 +299,13 @@ module.exports = (robot) ->
   # List/Show the Service Template Example for a specific template
   robot.respond /delete service (.*)/i, (res) ->
 
+    console.log "res.match[1]: #{res.match[1]}"
+    if res.match[1] is 'templates'
+      return
+
     # Use the config
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_TENANT = robot.brain.get('IWF_TENANT')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
