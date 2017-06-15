@@ -21,6 +21,7 @@ module.exports = (robot) ->
   robot.respond /(list|show) devices/i, (res) ->
 
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
@@ -70,6 +71,7 @@ module.exports = (robot) ->
   robot.respond /add device (.*) (.*) (.*) (.*)/i, (res) ->
 
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
@@ -117,6 +119,7 @@ module.exports = (robot) ->
   robot.respond /delete device (.*)/i, (res) ->
 
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
     DEVICE_UUID = res.match[1]
@@ -158,6 +161,7 @@ module.exports = (robot) ->
   robot.respond /(list|show) available iapps/i, (res) ->
 
     IWF_ROLE = robot.brain.get('IWF_ROLE')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
 
     if IWF_ROLE isnt "Administrator"
       res.reply "The user '#{IWF_USERNAME}' is a '#{IWF_ROLE}' role. However, this command is for 'Administrator' roles."
@@ -171,6 +175,7 @@ module.exports = (robot) ->
   robot.respond /(list|show) available service templates/i, (res) ->
 
     IWF_ROLE = robot.brain.get('IWF_ROLE')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
 
     if IWF_ROLE isnt "Administrator"
       res.reply "The user '#{IWF_USERNAME}' is a '#{IWF_ROLE}' role. However, this command is for 'Administrator' roles."
@@ -178,9 +183,8 @@ module.exports = (robot) ->
 
     else
       # list the Service Templates available to install.
-      res.reply "iApp: #{iapps.iApp_file}"
       for i of iapps.iApp_service_templates
-        res.reply "Service Templates: #{iapps.iApp_service_templates[i]}"
+        res.reply "Service Template: #{iapps.iApp_service_templates[i]}"
 
 ######## END (list|show) Available iApps & Service Templates ########
 
@@ -192,6 +196,7 @@ module.exports = (robot) ->
 
     # Use the config
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
@@ -243,6 +248,7 @@ module.exports = (robot) ->
 
     # Use the config
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
@@ -299,6 +305,7 @@ module.exports = (robot) ->
 
     # Use the config
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
@@ -352,6 +359,7 @@ module.exports = (robot) ->
 
     # Use the config
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
@@ -406,6 +414,7 @@ module.exports = (robot) ->
 
     # Use the config
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
@@ -445,6 +454,7 @@ module.exports = (robot) ->
 
     # Use the config
     IWF_ADDR = robot.brain.get('IWF_ADDR')
+    IWF_USERNAME = robot.brain.get('IWF_USERNAME')
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
