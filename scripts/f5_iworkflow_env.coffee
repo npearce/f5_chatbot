@@ -153,7 +153,7 @@ module.exports = (robot) ->
                      return
 
                    if resp.statusCode is 200
-                     res.reply "\'#{IWF_USERNAME}\' is an iWorkflow 'Administror'."
+                     res.reply "\'#{IWF_USERNAME}\' is an iWorkflow 'Administrator'."
                      robot.brain.set 'IWF_ROLE', 'Administrator'
                    if resp.statusCode is 401
                      res.reply "\'#{IWF_USERNAME}\' is an iWorkflow 'Tenant'."
