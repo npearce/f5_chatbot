@@ -24,8 +24,6 @@ module.exports = (robot) ->
 
     if IWF_ROLE is "Administrator"
 
-      console.log "ADD - TENANT_NAME: #{TENANT_NAME}"
-
       post_data = JSON.stringify({
         name: res.match[1],
         descrition: res.match[2]
