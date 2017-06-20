@@ -10,7 +10,7 @@
 #
 
 module.exports = (robot) ->
-  
+
 # A quick 'hear'ing test
   robot.hear /life/i, (res) ->
     res.send "42"
