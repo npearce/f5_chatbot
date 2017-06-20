@@ -25,8 +25,6 @@ module.exports = (robot) ->
 
     if IWF_ROLE is "Administrator"
 
-      res.reply "Reading devices on: #{IWF_ADDR}"
-
       robot.http("https://#{IWF_ADDR}/mgmt/shared/resolver/device-groups/cm-cloud-managed-devices/devices/", OPTIONS)
         .headers('X-F5-Auth-Token': IWF_TOKEN, 'Accept': "application/json")
         .get() (err, resp, body) ->
@@ -35,6 +33,7 @@ module.exports = (robot) ->
           if err
             res.reply "Encountered an error :( #{err}"
             return
+
           if resp.statusCode isnt 200
             if DEBUG
               console.log "resp.statusCode: #{resp.statusCode} - #{resp.statusMessage}"
@@ -45,18 +44,18 @@ module.exports = (robot) ->
 
           try
             if DEBUG then console.log "body: #{body}"
-            data = JSON.parse body
+            jp_body = JSON.parse body
 
-            if jp_body.items < 1
+            if jp_body.items.length < 1
               res.reply "Sorry, no devices...!"
               return
 
             else
               # Iterate through the devices.
-              for i of data.items
-                DEVICE_HOSTNAME = data.items[i].hostname
-                DEVICE_UUID = data.items[i].uuid
-                DEVICE_VERSION = data.items[i].version
+              for i of jp_body.items
+                DEVICE_HOSTNAME = jp_body.items[i].hostname
+                DEVICE_UUID = jp_body.items[i].uuid
+                DEVICE_VERSION = jp_body.items[i].version
                 res.reply "Device #{i}: #{DEVICE_HOSTNAME} - #{DEVICE_VERSION} - #{DEVICE_UUID}"
 
           catch error
