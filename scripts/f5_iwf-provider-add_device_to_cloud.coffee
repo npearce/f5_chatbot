@@ -49,7 +49,7 @@ module.exports = (robot) ->
             res.reply "Encountered an error :( #{err}"
             return
           if resp.statusCode isnt 200
-            res.reply "Something went wrong :( #{resp}"
+            res.reply "Something went wrong :( RESP: #{resp.statusCode} #{resp.statusMessage}"
             return
 
           else
