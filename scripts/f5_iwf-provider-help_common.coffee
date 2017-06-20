@@ -33,4 +33,5 @@ module.exports = (robot) ->
           For iWorkflow Provider commands:\n
           \thelp devices\n
           \thelp iapps\n
-          \thelp clouds\n"
+          \thelp clouds\n
+          \thelp users\n"
