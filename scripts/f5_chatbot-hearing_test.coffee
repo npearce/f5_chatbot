@@ -10,19 +10,10 @@
 #
 
 module.exports = (robot) ->
-
-# Do something with errors
-  robot.error (err, res) ->
-    robot.logger.error "DOES NOT COMPUTE"
-
-    if res?
-      res.reply "DOES NOT COMPUTE"
-
+  
 # A quick 'hear'ing test
   robot.hear /life/i, (res) ->
     res.send "42"
 
   robot.respond /(ping|hodor)/i, (res) ->
     res.send "hodor"
-
-######## END Environment Setup ########
