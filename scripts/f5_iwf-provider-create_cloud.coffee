@@ -15,7 +15,7 @@ module.exports = (robot) ->
   DEBUG = false # [true|false] enable per '*.coffee' file.
   OPTIONS = rejectUnauthorized: false # ignore HTTPS reqiuest self-signed certs notices/errors
 
-  robot.respond /add device (.*) (.*) (.*) (.*)/i, (res) ->
+  robot.respond /create cloud (.*) (.*)/i, (res) ->
 
     IWF_ADDR = robot.brain.get('IWF_ADDR')
     IWF_USERNAME = robot.brain.get('IWF_USERNAME')
@@ -27,16 +27,14 @@ module.exports = (robot) ->
       res.reply "Adding device \'#{res.match[1]}\' to iWorkflow: #{IWF_ADDR}"
 
       post_data = JSON.stringify({
-        address: res.match[1],
-        userName: res.match[2],
-        password: res.match[3],
-        automaticallyUpdateFramework: res.match[4]
+        name: res.match[1],
+        description: res.match[2],
       })
 
       if DEBUG then console.log "post_data: #{post_data}"
 
       # Perform the POST to authn/login
-      robot.http("https://#{IWF_ADDR}/mgmt/shared/resolver/device-groups/cm-cloud-managed-devices/devices/", OPTIONS)
+      robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/connectors/local/", OPTIONS)
         .headers('X-F5-Auth-Token': IWF_TOKEN, 'Accept': "application/json")
         .post(post_data) (err, resp, body) ->
 

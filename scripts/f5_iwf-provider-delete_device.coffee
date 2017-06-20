@@ -23,31 +23,29 @@ module.exports = (robot) ->
     IWF_ROLE = robot.brain.get('IWF_ROLE')
     DEVICE_UUID = res.match[1]
 
-    if IWF_ROLE isnt "Administrator"
-      res.reply "The user '#{IWF_USERNAME}' is a '#{IWF_ROLE}' role. However, this command is for 'Administrator' roles."
-      return
+    if IWF_ROLE is "Administrator"
 
-    robot.http("https://#{IWF_ADDR}/mgmt/shared/resolver/device-groups/cm-cloud-managed-devices/devices/#{DEVICE_UUID}", OPTIONS)
-      .headers('X-F5-Auth-Token': IWF_TOKEN, 'Accept': "application/json")
-      .delete() (err, resp, body) ->
+      robot.http("https://#{IWF_ADDR}/mgmt/shared/resolver/device-groups/cm-cloud-managed-devices/devices/#{DEVICE_UUID}", OPTIONS)
+        .headers('X-F5-Auth-Token': IWF_TOKEN, 'Accept': "application/json")
+        .delete() (err, resp, body) ->
 
-        # Handle error
-        if err
-          res.reply "Encountered an error :( #{err}"
-          return
-
-        if resp.statusCode isnt 200
-          if DEBUG
-            console.log "resp.statusCode: #{resp.statusCode} - #{resp.statusMessage}"
-            console.log "body.code: #{body.code} body.message: #{body.message} "
-            console.log "body: #{body}"
-          try
-            jp_body = JSON.parse body
-            res.reply "Something went wrong :( #{jp_body.code} - #{jp_body.message}"
+          # Handle error
+          if err
+            res.reply "Encountered an error :( #{err}"
             return
-          catch error
-            res.send "Ran into an error parsing JSON :("
-            return
-        else
-          res.reply "Status: #{resp.statusCode} - #{resp.statusMessage}"
-          if DEBUG then console.log "body: #{body}"
+
+          if resp.statusCode isnt 200
+            if DEBUG
+              console.log "resp.statusCode: #{resp.statusCode} - #{resp.statusMessage}"
+              console.log "body.code: #{body.code} body.message: #{body.message} "
+              console.log "body: #{body}"
+            try
+              jp_body = JSON.parse body
+              res.reply "Something went wrong :( #{jp_body.code} - #{jp_body.message}"
+              return
+            catch error
+              res.send "Ran into an error parsing JSON :("
+              return
+          else
+            res.reply "Status: #{resp.statusCode} - #{resp.statusMessage}"
+            if DEBUG then console.log "body: #{body}"

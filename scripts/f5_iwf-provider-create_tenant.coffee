@@ -13,8 +13,8 @@ module.exports = (robot) ->
   DEBUG = false # [true|false] enable per '*.coffee' file.
   OPTIONS = rejectUnauthorized: false # ignore HTTPS reqiuest self-signed certs notices/errors
 
-  # List/Show the authenticated users Tenant assignements
-  robot.respond /add tenant (.*) (.*)/i, (res) ->
+  # Create New iWorkflow Tenant w/ <name> <description>
+  robot.respond /create tenant (.*) (.*)/i, (res) ->
 
     #Respond with all the variables (bot not the password)
     IWF_ADDR = robot.brain.get('IWF_ADDR')
