@@ -1,4 +1,3 @@
-
 # Description:
 #   Simple robot to provide communication with F5 iControl declarative interfaces via the F5 iWorkflow platform
 #   Maintainer:
@@ -15,7 +14,7 @@ module.exports = (robot) ->
   # Example function with inputs
   robot.respond /(list|show) config/i, (res) ->
 
-    #Respond with all the variables (bot not the password)
+    # Respond with all the variables (bot not the password)
     IWF_ADDR = robot.brain.get 'IWF_ADDR'
     IWF_USERNAME = robot.brain.get 'IWF_USERNAME'
     IWF_TOKEN = robot.brain.get 'IWF_TOKEN'

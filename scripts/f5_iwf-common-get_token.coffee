@@ -88,7 +88,7 @@ module.exports = (robot) ->
                  res.send "Ran into an error parsing JSON :("
                  return
 
-               res.reply "Token is: #{IWF_TOKEN}\n Increased token timeout from #{IWF_TOKEN_TIMEOUT} to #{jp_body.timeout} seconds."
+               res.reply "Token is: #{IWF_TOKEN}\nIncreased token timeout from #{IWF_TOKEN_TIMEOUT} to #{jp_body.timeout} seconds."
 
                robot.http("https://#{IWF_ADDR}/mgmt/shared/authz/roles/Administrator", OPTIONS)
                  .headers('X-F5-Auth-Token': IWF_TOKEN, Accept: 'application/json')
@@ -98,8 +98,8 @@ module.exports = (robot) ->
                      return
 
                    if resp.statusCode is 200
-                     res.reply "\'#{IWF_USERNAME}\' is an iWorkflow 'Administrator'."
+                     res.reply "'#{IWF_USERNAME}' is an iWorkflow 'Administrator'."
                      robot.brain.set 'IWF_ROLE', 'Administrator'
                    if resp.statusCode is 401
-                     res.reply "\'#{IWF_USERNAME}\' is an iWorkflow 'Tenant'."
+                     res.reply "'#{IWF_USERNAME}' is an iWorkflow 'Tenant'."
                      robot.brain.set 'IWF_ROLE', 'Tenant'
