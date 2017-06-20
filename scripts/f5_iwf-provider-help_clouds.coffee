@@ -19,9 +19,8 @@ module.exports = (robot) ->
 
       res.reply "help clouds - prints this help\n\n
           \t(show|list) clouds - show ALL the clouds available.\n
-          \tadd cloud <name> <description> - create a new 'local'(BIG-IP) cloud.\n
-          \tadd <device_uuid> in cloud <cloud_uuid> - add a 'known'(discovered) BIG-IP to\n
-          \tadd <device_uuid> in cloud <cloud_uuid> - add a 'known'(discovered) BIG-IP to\n
+          \tcreate cloud <name> <description> - create a new 'local'(BIG-IP) cloud.\n
+          \tadd <device_uuid> to cloud <cloud_uuid> - add a 'known'(discovered) BIG-IP to\n
           \tthe specified 'local' Cloud Connector\n
           \tdelete cloud <cloud_uuid> - delete a 'local'(BIG-IP) Cloud Connector\n
           \n"
