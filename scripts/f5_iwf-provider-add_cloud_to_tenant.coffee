@@ -36,7 +36,7 @@ module.exports = (robot) ->
         ]
       })
 
-      console.log "patch_tenant: =#{patch_tenant}"
+      if DEBUG then console.log "patch_tenant: =#{patch_tenant}"
 
       robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenants/#{TENANT_NAME}", OPTIONS)
         .headers('X-F5-Auth-Token': IWF_TOKEN, Accept: 'application/json')
