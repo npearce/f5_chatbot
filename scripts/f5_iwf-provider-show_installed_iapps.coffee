@@ -51,8 +51,8 @@ module.exports = (robot) ->
               if jp_body.items.length < 1
                 res.reply "#{jp_body.items.length} iApps installed."
                 return
-              else
 
+              else
                 for i of jp_body.items
                   name = jp_body.items[i].name
                   res.reply "Installed iApp #{i}: #{name}"
