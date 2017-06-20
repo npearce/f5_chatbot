@@ -23,37 +23,33 @@ module.exports = (robot) ->
     IWF_ROLE = robot.brain.get('IWF_ROLE')
     CLOUD_UUID = res.match[2]
 
-    if IWF_ROLE isnt "Administrator"
-      res.reply "The user '#{IWF_USERNAME}' is a '#{IWF_ROLE}' role. However, this command is for 'Administrator' roles."
-      return
+    if IWF_ROLE is "Administrator"
 
-    res.reply "Reading #{CLOUD_UUID} details on: #{IWF_ADDR}\n...\n"
+      robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/connectors/local/#{CLOUD_UUID}", OPTIONS)
+        .headers('X-F5-Auth-Token': IWF_TOKEN, 'Accept': "application/json")
+        .get() (err, resp, body) ->
 
-    robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/connectors/local/#{CLOUD_UUID}", OPTIONS)
-      .headers('X-F5-Auth-Token': IWF_TOKEN, 'Accept': "application/json")
-      .get() (err, resp, body) ->
-
-        # Handle error
-        if err
-          res.reply "Encountered an error :( #{err}"
-          return
-        if resp.statusCode isnt 200
-          if DEBUG
-            console.log "resp.statusCode: #{resp.statusCode} - #{resp.statusMessage}"
-            console.log "body.code: #{body.code} body.message: #{body.message} "
-          jp_body = JSON.parse body # so we can grab some JSON values
-          res.reply "Something went wrong :( #{jp_body.code} - #{jp_body.message}"
-          return
-
-        else
-          try
-            if DEBUG then console.log "DEBUG: body: #{body}"
-            jp_body = JSON.parse body # so we can grab some JSON values
-            js_body = JSON.stringify(jp_body, ' ', '\t') # so we can pretty print the JSON
-
-            CLOUD_NAME = jp_body.name
-            CLOUD_UUID = jp_body.connectorId
-            res.reply "Cloud: #{CLOUD_NAME} - #{CLOUD_UUID}\n\n #{js_body}"
-          catch error
-            res.send "Ran into an error parsing JSON :("
+          # Handle error
+          if err
+            res.reply "Encountered an error :( #{err}"
             return
+          if resp.statusCode isnt 200
+            if DEBUG
+              console.log "resp.statusCode: #{resp.statusCode} - #{resp.statusMessage}"
+              console.log "body.code: #{body.code} body.message: #{body.message} "
+            jp_body = JSON.parse body # so we can grab some JSON values
+            res.reply "Something went wrong :( #{jp_body.code} - #{jp_body.message}"
+            return
+
+          else
+            try
+              if DEBUG then console.log "DEBUG: body: #{body}"
+              jp_body = JSON.parse body # so we can grab some JSON values
+              js_body = JSON.stringify(jp_body, ' ', '\t') # so we can pretty print the JSON
+
+              CLOUD_NAME = jp_body.name
+              CLOUD_UUID = jp_body.connectorId
+              res.reply "Cloud: #{CLOUD_NAME} - #{CLOUD_UUID}\n\n #{js_body}"
+            catch error
+              res.send "Ran into an error parsing JSON :("
+              return

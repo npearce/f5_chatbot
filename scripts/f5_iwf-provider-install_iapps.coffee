@@ -24,11 +24,8 @@ module.exports = (robot) ->
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
-    if IWF_ROLE isnt "Administrator"
-      res.reply "The user '#{IWF_USERNAME}' is a '#{IWF_ROLE}' role. However, this command is for 'Administrator' roles."
-      return
+    if IWF_ROLE is "Administrator"
 
-    else
       # the iApp we are going to install
       iapp_file_path = "#{iapps.iApp_loc}import-json/#{iapps.iApp_file}"
 

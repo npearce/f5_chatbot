@@ -30,26 +30,24 @@ module.exports = (robot) ->
     IWF_TENANT = robot.brain.get('IWF_TENANT')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
-    if IWF_ROLE isnt "Tenant"
-      res.reply "The user '#{IWF_USERNAME}' is a '#{IWF_ROLE}' role. However, this command is for 'Tenant' roles."
-      return
+    if IWF_ROLE is "Tenant"
 
-    if !IWF_TENANT?
-      res.reply "You must use 'set tenant <tenant_name>' before executing this command."
-      return
+      if !IWF_TENANT?
+        res.reply "You must use 'set tenant <tenant_name>' before executing this command."
+        return
 
-    robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenants/#{IWF_TENANT}/services/iapp/#{res.match[1]}", OPTIONS)
-      .headers("Content-Type": "application/json", 'X-F5-Auth-Token': IWF_TOKEN)
-      .delete() (err, resp, body) ->
+      robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenants/#{IWF_TENANT}/services/iapp/#{res.match[1]}", OPTIONS)
+        .headers("Content-Type": "application/json", 'X-F5-Auth-Token': IWF_TOKEN)
+        .delete() (err, resp, body) ->
 
-        # Handle error
-        if err
-          res.reply "Encountered an error :( #{err}"
-          return
+          # Handle error
+          if err
+            res.reply "Encountered an error :( #{err}"
+            return
 
-        if resp.statusCode isnt 200
-          res.reply "Something went wrong :( RESP: #{resp.statusCode} #{resp.statusMessage}"
-          if DEBUG then console.log "Something went wrong :( BODY: #{body}"
-          return
-        else
-          res.reply resp.statusCode + " - " + resp.statusMessage
+          if resp.statusCode isnt 200
+            res.reply "Something went wrong :( RESP: #{resp.statusCode} #{resp.statusMessage}"
+            if DEBUG then console.log "Something went wrong :( BODY: #{body}"
+            return
+          else
+            res.reply resp.statusCode + " - " + resp.statusMessage

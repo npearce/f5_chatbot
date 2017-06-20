@@ -24,11 +24,8 @@ module.exports = (robot) ->
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
-    if IWF_ROLE isnt "Administrator"
-      res.reply "The user '#{IWF_USERNAME}' is a '#{IWF_ROLE}' role. However, this command is for 'Administrator' roles."
-      return
+    if IWF_ROLE is "Administrator"
 
-    else
       res.reply "Installing Services Tempaltes on: #{IWF_ADDR}"
 
       for i of iapps.iApp_service_templates

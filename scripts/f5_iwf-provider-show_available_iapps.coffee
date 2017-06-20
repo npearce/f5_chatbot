@@ -20,10 +20,7 @@ module.exports = (robot) ->
     IWF_ROLE = robot.brain.get('IWF_ROLE')
     IWF_USERNAME = robot.brain.get('IWF_USERNAME')
 
-    if IWF_ROLE isnt "Administrator"
-      res.reply "The user '#{IWF_USERNAME}' is a '#{IWF_ROLE}' role. However, this command is for 'Administrator' roles."
-      return
+    if IWF_ROLE is "Administrator"
 
-    else
       # list the iApps available to install.
       res.reply "iApp: #{iapps.iApp_file}"

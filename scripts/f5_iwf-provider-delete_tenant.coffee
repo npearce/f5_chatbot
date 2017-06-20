@@ -24,8 +24,6 @@ module.exports = (robot) ->
 
     if IWF_ROLE is "Administrator"
 
-      console.log "DELETE - TENANT_NAME: #{TENANT_NAME}"
-
       robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenants/#{TENANT_NAME}", OPTIONS)
         .headers('X-F5-Auth-Token': IWF_TOKEN, 'Accept': "application/json")
         .delete() (err, resp, body) ->

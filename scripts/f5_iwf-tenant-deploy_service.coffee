@@ -27,38 +27,36 @@ module.exports = (robot) ->
     IWF_TENANT = robot.brain.get('IWF_TENANT')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
-    if IWF_ROLE isnt "Tenant"
-      res.reply "The user '#{IWF_USERNAME}' is a '#{IWF_ROLE}' role. However, this command is for 'Tenant' roles."
-      return
+    if IWF_ROLE is "Tenant"
 
-    if !IWF_TENANT?
-      res.reply "You must use 'set tenant <tenant_name>' before executing this command."
-      return
+      if !IWF_TENANT?
+        res.reply "You must use 'set tenant <tenant_name>' before executing this command."
+        return
 
-    service_input = res.match[1]
-    decoded_input = decodeURIComponent service_input.replace(/\+/g, '%20')
+      service_input = res.match[1]
+      decoded_input = decodeURIComponent service_input.replace(/\+/g, '%20')
 
-    if DEBUG then console.log "decoded_input: #{decoded_input}"
+      if DEBUG then console.log "decoded_input: #{decoded_input}"
 
-    robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenants/#{IWF_TENANT}/services/iapp", OPTIONS)
-      .headers("Content-Type": "application/json", 'X-F5-Auth-Token': IWF_TOKEN)
-      .post(decoded_input) (err, resp, body) ->
+      robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenants/#{IWF_TENANT}/services/iapp", OPTIONS)
+        .headers("Content-Type": "application/json", 'X-F5-Auth-Token': IWF_TOKEN)
+        .post(decoded_input) (err, resp, body) ->
 
-        # Handle error
-        if err
-          res.reply "Encountered an error :( #{err}"
-          return
+          # Handle error
+          if err
+            res.reply "Encountered an error :( #{err}"
+            return
 
-        if resp.statusCode isnt 200
-          res.reply "Something went wrong :( RESP: #{resp.statusCode} #{resp.statusMessage}"
-          if DEBUG then console.log "Something went wrong :( BODY: #{body}"
-          return
+          if resp.statusCode isnt 200
+            res.reply "Something went wrong :( RESP: #{resp.statusCode} #{resp.statusMessage}"
+            if DEBUG then console.log "Something went wrong :( BODY: #{body}"
+            return
 
-        try
-          res.reply resp.statusCode + " - " + resp.statusMessage
-          jp_body = JSON.parse body
-#          res.reply "Deployed: #{jp_body.name}"
-          res.reply "iApp #{jp_body.name} - Installed - #{resp.statusCode} - #{resp.statusMessage}"
-        catch error
-         res.send "Ran into an error parsing JSON :("
-         return
+          try
+            res.reply resp.statusCode + " - " + resp.statusMessage
+            jp_body = JSON.parse body
+  #          res.reply "Deployed: #{jp_body.name}"
+            res.reply "iApp #{jp_body.name} - Installed - #{resp.statusCode} - #{resp.statusMessage}"
+          catch error
+           res.send "Ran into an error parsing JSON :("
+           return

@@ -22,36 +22,34 @@ module.exports = (robot) ->
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
-    if IWF_ROLE isnt "Administrator"
-      res.reply "The user '#{IWF_USERNAME}' is a '#{IWF_ROLE}' role. However, this command is for 'Administrator' roles."
-      return
+    if IWF_ROLE is "Administrator"
 
-    res.reply "Adding device \'#{res.match[1]}\' to iWorkflow: #{IWF_ADDR}"
+      res.reply "Adding device \'#{res.match[1]}\' to iWorkflow: #{IWF_ADDR}"
 
-    post_data = JSON.stringify({
-      name: res.match[1],
-      descriptions: res.match[2],
-    })
+      post_data = JSON.stringify({
+        name: res.match[1],
+        description: res.match[2],
+      })
 
-    if DEBUG then console.log "post_data: #{post_data}"
+      if DEBUG then console.log "post_data: #{post_data}"
 
-    # Perform the POST to authn/login
-    robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/connectors/local/", OPTIONS)
-      .headers('X-F5-Auth-Token': IWF_TOKEN, 'Accept': "application/json")
-      .post(post_data) (err, resp, body) ->
+      # Perform the POST to authn/login
+      robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/connectors/local/", OPTIONS)
+        .headers('X-F5-Auth-Token': IWF_TOKEN, 'Accept': "application/json")
+        .post(post_data) (err, resp, body) ->
 
-        # Handle error
-        if err
-          res.reply "Encountered an error :( #{err}"
-          return
+          # Handle error
+          if err
+            res.reply "Encountered an error :( #{err}"
+            return
 
-        if resp.statusCode isnt 200
-          if DEBUG
-            console.log "resp.statusCode: #{resp.statusCode} - #{resp.statusMessage}"
-            console.log "body.code: #{body.code} body.message: #{body.message} "
-          jp_body = JSON.parse body
-          res.reply "Something went wrong :( #{jp_body.code} - #{jp_body.message}"
-          return
-        else
-          res.reply "Status: #{resp.statusCode} - #{resp.statusMessage}"
-          if DEBUG then console.log "body: #{body}"
+          if resp.statusCode isnt 200
+            if DEBUG
+              console.log "resp.statusCode: #{resp.statusCode} - #{resp.statusMessage}"
+              console.log "body.code: #{body.code} body.message: #{body.message} "
+            jp_body = JSON.parse body
+            res.reply "Something went wrong :( #{jp_body.code} - #{jp_body.message}"
+            return
+          else
+            res.reply "Status: #{resp.statusCode} - #{resp.statusMessage}"
+            if DEBUG then console.log "body: #{body}"

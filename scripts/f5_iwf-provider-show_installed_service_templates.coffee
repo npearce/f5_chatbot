@@ -24,11 +24,8 @@ module.exports = (robot) ->
     IWF_TOKEN = robot.brain.get('IWF_TOKEN')
     IWF_ROLE = robot.brain.get('IWF_ROLE')
 
-    if IWF_ROLE isnt "Administrator"
-      res.reply "The user '#{IWF_USERNAME}' is a '#{IWF_ROLE}' role. However, this command is for 'Administrator' roles."
-      return
+    if IWF_ROLE is "Administrator"
 
-    else
       robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/provider/templates/iapp", OPTIONS)
         .headers('X-F5-Auth-Token': IWF_TOKEN, 'Accept': "application/json")
         .get() (err, resp, body) ->
