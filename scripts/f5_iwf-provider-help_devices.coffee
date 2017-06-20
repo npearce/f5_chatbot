@@ -20,7 +20,7 @@ module.exports = (robot) ->
       res.reply "help devices - prints this help\n\n
           \t(list|show) devices - show the devices (BIG-IP and iWorkflow) in the iWorkflow\n
           \tinventory.\n
-          \tadd device <ip_address> <big-ip_user> <big-ip_password> <(true|false)> - Instructs\n
+          \tdiscover device <ip_address> <big-ip_user> <big-ip_password> <(true|false)> - Instructs\n
           \tiWorkflow to discover a new BIG-IP device.\n
           \tRequires:\n
           \t\t1) Mgmt IP Address of the BIG-IP\n
