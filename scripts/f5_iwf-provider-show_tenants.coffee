@@ -32,9 +32,15 @@ module.exports = (robot) ->
 
           try
             jp_body = JSON.parse body
-            for i of jp_body.items
-              tenant_name = jp_body.items[i].name
-              res.reply "Tenant #{i}: #{tenant_name}"
+
+            if jp_body.items < 1
+              res.reply "Sorry, no iWorkflow Tenants...! Reduce rent?"
+              return
+
+            else
+              for i of jp_body.items
+                tenant_name = jp_body.items[i].name
+                res.reply "Tenant #{i}: #{tenant_name}"
 
           catch error
             res.send "Ran into an error parsing JSON :("

@@ -45,11 +45,17 @@ module.exports = (robot) ->
               if DEBUG then console.log "DEBUG: body: #{body}"
               jp_body = JSON.parse body # so we can grab some JSON values
 
-              for i of jp_body.items
-                # Iterate through the devices.
-                CLOUD_NAME = jp_body.items[i].name
-                CLOUD_UUID = jp_body.items[i].connectorId
-                res.reply "Cloud #{i}: #{CLOUD_NAME} - #{CLOUD_UUID}"
+              if jp_body.items < 1
+                res.reply "Sorry, no clouds... Wear sunscreen!"
+                return
+
+              else
+                for i of jp_body.items
+                  # Iterate through the devices.
+                  CLOUD_NAME = jp_body.items[i].name
+                  CLOUD_UUID = jp_body.items[i].connectorId
+                  res.reply "Cloud #{i}: #{CLOUD_NAME} - #{CLOUD_UUID}"
+
             catch error
               res.send "Ran into an error parsing JSON :("
               return

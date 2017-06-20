@@ -52,11 +52,18 @@ module.exports = (robot) ->
             return
           else
             try
-              data = JSON.parse body
-              for i of data.items
-                name = data.items[i].name
-                uuid = data.items[i].connectorId
-                res.reply "Cloud: #{name}, UUID: #{uuid}"
+              jp_body = JSON.parse body
+
+              if jp_body.items < 1
+                res.reply "Sorry, no clouds... Wear sunscreen!"
+                return
+
+              else
+                for i of jp_body.items
+                  name = jp_body.items[i].name
+                  uuid = jp_body.items[i].connectorId
+                  res.reply "Cloud: #{name}, UUID: #{uuid}"
+                  
             catch error
               res.send "Ran into an error parsing JSON :("
               return

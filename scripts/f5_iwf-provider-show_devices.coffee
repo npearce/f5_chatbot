@@ -47,12 +47,17 @@ module.exports = (robot) ->
             if DEBUG then console.log "body: #{body}"
             data = JSON.parse body
 
-            # Iterate through the devices.
-            for i of data.items
-              DEVICE_HOSTNAME = data.items[i].hostname
-              DEVICE_UUID = data.items[i].uuid
-              DEVICE_VERSION = data.items[i].version
-              res.reply "Device #{i}: #{DEVICE_HOSTNAME} - #{DEVICE_VERSION} - #{DEVICE_UUID}"
+            if jp_body.items < 1
+              res.reply "Sorry, no devices...!"
+              return
+
+            else
+              # Iterate through the devices.
+              for i of data.items
+                DEVICE_HOSTNAME = data.items[i].hostname
+                DEVICE_UUID = data.items[i].uuid
+                DEVICE_VERSION = data.items[i].version
+                res.reply "Device #{i}: #{DEVICE_HOSTNAME} - #{DEVICE_VERSION} - #{DEVICE_UUID}"
 
           catch error
            res.send "Ran into an error parsing JSON :("
