@@ -1,5 +1,5 @@
 {
-  "name": "example-f5-http-url-routing-lb",
+  "name": "{{example-f5-http-url-routing-lb}}",
   "tenantTemplateReference": {
     "link": "https://localhost/mgmt/cm/cloud/tenant/templates/iapp/f5-http-url-routing-lb"
   },

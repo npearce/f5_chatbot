@@ -1,5 +1,5 @@
 {
-  "name": "example-f5-fastl4-udp-lb",
+  "name": "{{example-f5-fastl4-udp-lb}}",
   "tenantTemplateReference": {
     "link": "https://localhost/mgmt/cm/cloud/tenant/templates/iapp/f5-fastl4-udp-lb"
   },
@@ -8,7 +8,7 @@
       "id": "cloudConnectorReference",
       "value": "https://localhost/mgmt/cm/cloud/connectors/local/{{iwf_connector_uuid}}"
     }
-  ],  
+  ],
   "vars": [
     {
       "name": "pool__addr",
