@@ -32,7 +32,6 @@ module.exports = (robot) ->
       \n
       \n
       Tenant Commands:\n
-      ** WARNING: The following commands requires 'Administrator' role credentials.\n
         \tTo verify your current operating role, execute: 'show config'\n
       \n
         \t(show|list) tenants - Returns a list of Tenant assigments associate with the\n
@@ -47,7 +46,7 @@ module.exports = (robot) ->
         \tdeploy service <encoded_JSON_Input> - deploys a service to a BIG-IP device.\n
         \tNOTE: Requires 'URLencoded Service Template input. Try: 'encode json'.\n\n
         \tencode json - returns a URL list for free sites that will URL encode your JSON.\n
-        \tdelete service <name> - deletes a deoployed L4-L7 services. To view services\n
+        \tdelete service <name> - deletes a deployed L4-L7 service. To view services\n
         \tuse '(show|list) deployed services'."
 
 ######## END Help ########
