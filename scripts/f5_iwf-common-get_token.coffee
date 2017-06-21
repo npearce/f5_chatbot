@@ -47,7 +47,9 @@ module.exports = (robot) ->
           res.reply "Encountered an error :( #{err}"
           return
         if resp.statusCode isnt 200
-          res.reply "Something went wrong :( #{resp}"
+          if DEBUG then console.log "resp.statusCode: #{resp.statusCode} - #{resp.statusMessage}"
+          jp_body = JSON.parse body # so we can grab some JSON values
+          res.reply "Something went wrong :( #{jp_body.code} - #{jp_body.message}"
           return
 
         try
