@@ -39,7 +39,7 @@ module.exports = (robot) ->
         \tset tenant <tenant_name> - Specify which of the users associated tenants you\n
         \twith to work with. A user can have multiple Tenant assignments.\n
         \t(show|list) deployed services\n
-        \t(show|list) services templates\n
+        \t(show|list) service templates\n
         \t(show|list) service template example <service_template_name> - get the example\n
         \tJSON post to deploy a service. Use '[list|show] service templates' to view\n
         \twhat is installed.\n
