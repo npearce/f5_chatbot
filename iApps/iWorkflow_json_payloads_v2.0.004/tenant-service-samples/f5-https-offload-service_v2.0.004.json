@@ -1,5 +1,5 @@
 {
-  "name": "example-f5-https-offload",
+  "name": "{{example-f5-https-offload}}",
   "tenantTemplateReference": {
     "link": "https://localhost/mgmt/cm/cloud/tenant/templates/iapp/f5-https-offload"
   },
