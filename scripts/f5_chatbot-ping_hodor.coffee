@@ -17,3 +17,6 @@ module.exports = (robot) ->
 
   robot.respond /(ping|hodor)/i, (res) ->
     res.send "hodor"
+
+  robot.catchAll (msg) ->
+    res.send "hodor"
