@@ -54,7 +54,7 @@ module.exports = (robot) ->
               else
                 for i of jp_body.items
                   name = jp_body.items[i].name
-                  res.reply "\tService Templates: #{name}"
+                  res.reply "Service Templates: #{name}"
 
             catch error
               res.send "Ran into an error parsing JSON :("
