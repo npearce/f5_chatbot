@@ -20,5 +20,8 @@ module.exports = (robot) ->
     IWF_TOKEN = robot.brain.get 'IWF_TOKEN'
     IWF_TENANT = robot.brain.get 'IWF_TENANT'
     IWF_ROLE = robot.brain.get 'IWF_ROLE'
+    BOT_ADAPTER = robot.brain.get 'BOT_ADAPTER'
 
-    res.reply "iWorkflow Address: #{IWF_ADDR}\niWorkflow Username: #{IWF_USERNAME}\niWorkflow Role (Admin/Tenant): #{IWF_ROLE}\nAuth Token: #{IWF_TOKEN}\niWorkflow Tenant: #{IWF_TENANT}\n"
+    res.reply "iWorkflow Address: #{IWF_ADDR}\niWorkflow Username: #{IWF_USERNAME}\n
+    iWorkflow Role (Admin/Tenant): #{IWF_ROLE}\nAuth Token: #{IWF_TOKEN}\n
+    iWorkflow Tenant: #{IWF_TENANT}\nhubot adapter: #{BOT_ADAPTER}\n"
