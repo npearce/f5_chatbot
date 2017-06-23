@@ -1,6 +1,6 @@
 {
-  "name": "hal",
-  "version": "0.0.0",
+  "name": "f5bot",
+  "version": "0.1.0",
   "private": true,
   "author": "Nathan Pearce <n.pearce@f5.com>",
   "description": "Simple bot for communicating with F5 iControl declarative interfaces",
