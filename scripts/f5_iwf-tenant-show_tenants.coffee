@@ -39,7 +39,7 @@ module.exports = (robot) ->
               for i of jp_body.items
                 long_name = jp_body.items[i].displayName
                 short_name = long_name.split(" ")
-                res.reply "Tenant #{i}: #{short_name[i]}"
+                res.reply "Tenant #{i}: #{short_name[0]}"
 
           catch error
             res.send "Ran into an error parsing JSON :("
