@@ -15,8 +15,8 @@ module.exports = (robot) ->
   robot.hear /life/i, (res) ->
     res.send "42"
 
-  robot.respond /(ping|hodor)/i, (res) ->
+  robot.hear /(ping|hodor)/i, (res) ->
     res.send "hodor"
 
-  robot.catchAll (msg) ->
+  robot.catchAll (res) ->
     res.send "hodor"
