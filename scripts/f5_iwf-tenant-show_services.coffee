@@ -32,7 +32,7 @@ module.exports = (robot) ->
         res.reply "You must set a tenant to work with. Refer to \'help list tenants\' and \'help set tenant\'"
         return
 
-  # Get a list of the Deployed services for the specified iWorkflow Tenant
+      # Get a list of the Deployed services for the specified iWorkflow Tenant
       robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/tenants/#{IWF_TENANT}/services/iapp", OPTIONS)
         .headers('X-F5-Auth-Token': IWF_TOKEN, Accept: 'application/json')
         .get() (err, resp, body) ->
