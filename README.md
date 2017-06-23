@@ -1,4 +1,4 @@
-# F5_ChatBot v0.1.0-beta
+# F5_ChatBot v0.1.0
 
 This is a simple robot to communicate with F5 iControl declarative interfaces.
 
