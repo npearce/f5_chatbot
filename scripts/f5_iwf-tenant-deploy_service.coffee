@@ -37,26 +37,26 @@ module.exports = (robot) ->
       if BOT_ADAPTER is "shell"
 
         try
-          if DEBUG console.log "Trying to parse JSON..."
+          if DEBUG then console.log "Trying to parse JSON..."
           post_input = JSON.parse input
-          if DEBUG console.log "post_input: #{JSON.stringify post_input}"
+          if DEBUG then console.log "post_input: #{JSON.stringify post_input}"
         catch error
-          if DEBUG console.log "Its not JSON. Trying URLdecode..."
+          if DEBUG then console.log "Its not JSON. Trying URLdecode..."
 
           try
             decoded_input = decodeURIComponent input.replace(/\+/g, '%20')
             post_input = JSON.parse decoded_input
-            if DEBUG console.log "2post_input: #{post_input}"
+            if DEBUG then console.log "2post_input: #{post_input}"
           catch error
-            if DEBUG console.log "It's not URI enconded..."
+            if DEBUG then console.log "It's not URI enconded..."
 
       else if BOT_ADAPTER is "slack"
 
         try
-          if DEBUG console.log "Trying to parse JSON..."
+          if DEBUG then console.log "Trying to parse JSON..."
           post_input = JSON.parse input
         catch error
-          if DEBUG console.log "Its not JSON"
+          if DEBUG then console.log "Its not JSON"
 
       else
         res.reply "That wasn't JSON, and it was URLEncoded... What was that?"
@@ -87,5 +87,5 @@ module.exports = (robot) ->
               jp_body = JSON.parse body
               res.reply "iApp #{jp_body.name} - Installed - #{resp.statusCode} - #{resp.statusMessage}"
             catch error
-             res.send "Ran into an error parsing JSON :("
-             return
+              res.send "Ran into an error parsing JSON :("
+              return
