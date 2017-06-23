@@ -15,6 +15,7 @@ module.exports = (robot) ->
 
   robot.respond /help\b/i, (res) ->
     IWF_ROLE = robot.brain.get('IWF_ROLE')
+    BOT_ADAPTER = robot.brain.get('BOT_ADAPTER')
 
     if IWF_ROLE is "Tenant"
     #Respond with all the variables (bot not the password)
@@ -38,15 +39,24 @@ module.exports = (robot) ->
         \tauthenticated user.\n
         \tset tenant <tenant_name> - Specify which of the users associated tenants you\n
         \twith to work with. A user can have multiple Tenant assignments.\n
-        \t(show|list) deployed services\n
         \t(show|list) service templates\n
         \t(show|list) service template example <service_template_name> - get the example\n
         \tJSON post to deploy a service. Use '[list|show] service templates' to view\n
         \twhat is installed.\n
-        \tdeploy service <encoded_JSON_Input> - deploys a service to a BIG-IP device.\n
-        \tNOTE: Requires 'URLencoded Service Template input. Try: 'encode json'.\n\n
-        \tencode json - returns a URL list for free sites that will URL encode your JSON.\n
+        \t
+        \t(show|list) services\n
+        \tshow service <service_name>\n
+        \tdeploy service <JSON> - deploys a service to a BIG-IP device.\n
+        \tmodify service <service_name> <JSON> - deploys a service to a BIG-IP device.\n
         \tdelete service <name> - deletes a deployed L4-L7 service. To view services\n
-        \tuse '(show|list) deployed services'."
+        \tuse '(show|list) deployed services'.\n
+        \n
+        \t**NOTE: if you are using the 'slack' adapter you can 'paste' JSON directly onto\n
+        \tthe end of the command. However, i you are using the 'shell' adapter, you will\n
+        \teither need to a) remove the newlines from the JSON (ceating single-line JSON)\m
+        \tor URLencode the JSON into a single encoded stringify\n
+        \n
+        \tTry: 'encode json'.\n\n
+        \tencode json - returns a URL list for free sites that will URL encode your JSON.\n"
 
 ######## END Help ########
