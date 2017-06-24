@@ -38,7 +38,7 @@ module.exports = (robot) ->
       	]
       })
 
-      console.log "patch_cloud: =#{patch_cloud}"
+      if DEBUG then console.log "patch_cloud: =#{patch_cloud}"
 
       robot.http("https://#{IWF_ADDR}/mgmt/cm/cloud/connectors/local/#{CLOUD_UUID}", OPTIONS)
         .headers('X-F5-Auth-Token': IWF_TOKEN, Accept: 'application/json')
