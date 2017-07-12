@@ -88,9 +88,14 @@ module.exports = (robot) ->
               res.reply "iApp #{jp_body.name} - Installed - #{resp.statusCode} - #{resp.statusMessage}"
             catch error
 <<<<<<< HEAD
+<<<<<<< HEAD
              res.send "Ran into an error parsing JSON :("
              return
 =======
               res.send "Ran into an error parsing JSON :("
               return
 >>>>>>> release_v0.1.0
+=======
+              res.send "Ran into an error parsing JSON :("
+              return
+>>>>>>> origin/develop
