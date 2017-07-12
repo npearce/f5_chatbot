@@ -81,7 +81,7 @@ execute the following to run 'f5_chatbot':
 If successful you should see:
 
 ```
-[ec2-user@DockerHost1 ~]$ docker run -t --rm --name f5_chatbot_dev npearce/f5_chatbot:develop ./bin/hubot
+[ec2-user@DockerHost1 ~]$ docker run -t --rm --name f5_chatbot_dev npearce/f5_chatbot:latest ./bin/hubot
 Unable to find image 'npearce/f5_chatbot' locally
 latest: Pulling from npearce/f5_chatbot
 cfc728c1c558: Pull complete
