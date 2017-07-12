@@ -87,5 +87,10 @@ module.exports = (robot) ->
               jp_body = JSON.parse body
               res.reply "iApp #{jp_body.name} - Installed - #{resp.statusCode} - #{resp.statusMessage}"
             catch error
+<<<<<<< HEAD
              res.send "Ran into an error parsing JSON :("
              return
+=======
+              res.send "Ran into an error parsing JSON :("
+              return
+>>>>>>> release_v0.1.0
