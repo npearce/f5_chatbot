@@ -14,7 +14,7 @@ module.exports = (robot) ->
 
   iapps = require "../iApps/iApps.json" # iApps and Service Templates available to install.
   PAVE_INPUT = require "./provider_pave.json"  # TODO Move this back to ../iApps/
-  DEBUG = true # [true|false] enable per '*.coffee' file.
+  DEBUG = false # [true|false] enable per '*.coffee' file.
   OPTIONS = rejectUnauthorized: false # ignore HTTPS reqiuest self-signed certs notices/errors
 
 # Install App Svcs iApp
@@ -75,6 +75,12 @@ module.exports = (robot) ->
               robot.brain.set 'PAVE_IWF_TOKEN', PAVE_IWF_TOKEN
               console.log "PAVE_IWF_TOKEN #{PAVE_IWF_TOKEN}"
               resolve true
+
+
+
+######################
+## Create Resources ##
+######################
 
 
     discoverBIGIP = () ->
@@ -261,6 +267,11 @@ module.exports = (robot) ->
               reject error
 
 
+
+####################
+## Link Resources ##
+####################
+
     addDeviceToCloud = () ->
       return new Promise (resolve, reject) ->
 
@@ -380,6 +391,103 @@ module.exports = (robot) ->
 
 
 
+
+#######################################
+## Install iApps & Service Templates ##
+#######################################
+
+
+    installiApps = () ->
+      return new Promise (resolve, reject) ->
+
+        console.log "######.then - Installing iApps..."
+
+        PAVE_IWF_TOKEN = robot.brain.get('PAVE_IWF_TOKEN')
+
+        # the iApp we are going to install
+        iapp_file_path = "#{iapps.iApp_loc}import-json/#{iapps.iApp_file}"
+
+        # Contruct JSON for the POST to authn/login
+        post_data = require "#{iapp_file_path}"
+
+        try
+          js_post_data = JSON.stringify post_data
+        catch error
+          res.send "Ran into an error parsing iApp JSON :("
+          return
+
+        # Perform the installation (POST to /iapps)
+        robot.http("https://#{PAVE_IWF_ADDR}/mgmt/cm/cloud/templates/iapp", OPTIONS)
+          .headers("Content-Type": "application/json", 'X-F5-Auth-Token': PAVE_IWF_TOKEN)
+          .post(js_post_data) (err, resp, body) ->
+
+            # Handle error
+            if err
+              res.reply "Encountered an error :( #{err}"
+              reject error
+
+            if resp.statusCode isnt 200
+              res.reply "Something went wrong :( RESP: #{resp.statusCode} #{resp.statusMessage}"
+              if DEBUG then console.log "Something went wrong :( BODY: #{body}"
+              reject "#{resp.statusCode} #{resp.statusMessage}"
+            else
+              try
+                res.reply resp.statusCode + " - " + resp.statusMessage
+                jp_body = JSON.parse body
+                res.reply "iApp #{jp_body.name} - Installed - #{resp.statusCode} - #{resp.statusMessage}"
+                resolve "#{resp.statusCode} #{resp.statusMessage}"
+
+              catch error
+               res.send "Ran into an error parsing response JSON :("
+               reject "Ran into an error parsing response JSON response :("
+
+
+
+    installServiceTemplates = () ->
+      return new Promise (resolve, reject) ->
+
+        console.log "######.then - Installing Service Templates..."
+
+        PAVE_IWF_TOKEN = robot.brain.get('PAVE_IWF_TOKEN')
+
+        for i of iapps.iApp_service_templates
+          # the Service_Templates we are going to install
+          service_file_path = "#{iapps.iApp_loc}service-templates/#{iapps.iApp_service_templates[i]}"
+
+          # Contruct JSON for the POST to authn/login
+          post_data = require "#{service_file_path}"
+          try
+            js_post_data = JSON.stringify post_data
+          catch error
+            res.send "Ran into an error parsing Service Template JSON :("
+            return
+
+          # Perform the deletion (DELETE to /iapps)
+          robot.http("https://#{PAVE_IWF_ADDR}/mgmt/cm/cloud/provider/templates/iapp", OPTIONS)
+            .headers("Content-Type": "application/json", 'X-F5-Auth-Token': PAVE_IWF_TOKEN)
+            .post(js_post_data) (err, resp, body) ->
+
+              # Handle error
+              if err
+                res.reply "Encountered an error :( #{err}"
+                reject err
+
+              jp_body = JSON.parse body
+
+              if resp.statusCode isnt 200
+                res.reply "Something went wrong :( RESP: #{resp.statusCode} #{resp.statusMessage} - #{jp_body.message}"
+                if DEBUG then console.log "Something went wrong :( BODY: #{body}"
+                reject "#{resp.statusCode} #{resp.statusMessage}"
+              else
+                res.reply "Service Template #{jp_body.templateName} - Installed - #{resp.statusCode} - #{resp.statusMessage}"
+
+        resolve "#{resp.statusCode} #{resp.statusMessage}"
+
+
+######################
+## The Promie Chain ##
+######################
+
 #    if IWF_ROLE is "Administrator"
     getToken().then (token) ->
       console.log "token: #{token}"
@@ -411,6 +519,12 @@ module.exports = (robot) ->
 
     .then (result) ->
       console.log "Add User to Tenant: #{result}"
+      installiApps()
 
-    .then () ->
-      console.log "All Done"
+    .then (result) ->
+      console.log "Installed iApps: #{result}"
+      installServiceTemplates()
+
+    .then (result) ->
+      console.log "Installed Service Templates: #{result}"
+      console.log "\n\nAll Done"
