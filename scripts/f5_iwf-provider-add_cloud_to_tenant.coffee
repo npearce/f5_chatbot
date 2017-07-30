@@ -27,7 +27,7 @@ module.exports = (robot) ->
     if IWF_ROLE is "Administrator"
 
   #TODO edit a device list.
-      # Add device to local (BIG-IP) cloud connector
+      # Add local (BIG-IP) cloud connector to Tenant
       patch_tenant = JSON.stringify({
         "cloudConnectorReferences": [
           {
