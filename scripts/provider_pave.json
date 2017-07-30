@@ -1,0 +1,10 @@
+{
+  "prefix":"demo1_",
+  "Description":"iWorkflow Provider Demo",
+  "iworkflow_address":"192.168.176.129",
+  "iworkflow_username":"admin",
+  "iworkflow_password":"admin",
+  "bigip_address":"192.168.176.128",
+  "bigip_username":"admin",
+  "bigip_password":"admin"
+}

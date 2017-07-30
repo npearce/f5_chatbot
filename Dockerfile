@@ -7,7 +7,7 @@ MAINTAINER Nathan Pearce <n.pearce@f5.com>
 RUN apk update && apk upgrade && apk add curl && apk add nodejs && apk add nodejs-npm
 
 # Install some Node packages
-RUN npm update && npm install -g yo generator-hubot
+RUN npm update && npm install -g yo generator-hubot && npm install promise
 
 # Create a user for Hubot
 RUN adduser -h /home/hubot -s /bin/sh -S hubot

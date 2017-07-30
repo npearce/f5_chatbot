@@ -14,3 +14,6 @@ dev_notes.md
 scripts/f5_iworkflow_functions.coffee
 
 scripts/f5_iworkflow_deploy.coffee
+
+deploy_service_example-f5-http-lb.json
+
