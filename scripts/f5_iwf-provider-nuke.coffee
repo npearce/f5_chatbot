@@ -13,28 +13,33 @@ Promise = require('promise')
 module.exports = (robot) ->
 
   iapps = require "../iApps/iApps.json" # iApps and Service Templates available to install.
-  PAVE_INPUT = require "./provider_pave.json"  # TODO Move this back to ../iApps/
+#  PAVE_INPUT = require "../iApps/provider_pave_example.json"  # TODO Move this back to ../iApps/
   DEBUG = false # [true|false] enable per '*.coffee' file.
   OPTIONS = rejectUnauthorized: false # ignore HTTPS reqiuest self-signed certs notices/errors
 
-  robot.brain.set 'PAVE_PREFIX', PAVE_INPUT.prefix
-  robot.brain.set 'PAVE_IWF_ADDR', PAVE_INPUT.iworkflow_address
-  robot.brain.set 'PAVE_BIGIP_ADDR', PAVE_INPUT.bigip_address
-  robot.brain.set 'PAVE_IWF_USERNAME', PAVE_INPUT.iworkflow_username
-  robot.brain.set 'PAVE_IWF_PASSWORD', PAVE_INPUT.iworkflow_password
-  robot.brain.set 'PAVE_TENANT_USER', PAVE_INPUT.prefix+'user'
-
-
-  PAVE_IWF_ADDR = robot.brain.get('PAVE_IWF_ADDR')
-  PAVE_PREFIX = robot.brain.get('PAVE_PREFIX')
-  PAVE_IWF_USERNAME = robot.brain.get('PAVE_IWF_USERNAME')
-  PAVE_IWF_PASSWORD = robot.brain.get('PAVE_IWF_PASSWORD')
-  PAVE_TENANT_USER = robot.brain.get('PAVE_TENANT_USER')
-  PAVE_BIGIP_ADDR = robot.brain.get('PAVE_BIGIP_ADDR')
 
 # Install App Svcs iApp
-  robot.respond /nuke (.*)/i, (res) ->
+  robot.respond /nuke ((.*\s*)+)/i, (res) ->
     res.reply 'nuking'
+
+    console.log "res.match[1]: #{res.match[1]}"
+    PAVE_INPUT = JSON.parse res.match[1]
+
+    robot.brain.set 'PAVE_PREFIX', PAVE_INPUT.prefix
+    robot.brain.set 'PAVE_IWF_ADDR', PAVE_INPUT.iworkflow_address
+    robot.brain.set 'PAVE_BIGIP_ADDR', PAVE_INPUT.bigip_address
+    robot.brain.set 'PAVE_IWF_USERNAME', PAVE_INPUT.iworkflow_username
+    robot.brain.set 'PAVE_IWF_PASSWORD', PAVE_INPUT.iworkflow_password
+    robot.brain.set 'PAVE_TENANT_USER', PAVE_INPUT.prefix+'user'
+
+
+    PAVE_IWF_ADDR = robot.brain.get('PAVE_IWF_ADDR')
+    PAVE_PREFIX = robot.brain.get('PAVE_PREFIX')
+    PAVE_IWF_USERNAME = robot.brain.get('PAVE_IWF_USERNAME')
+    PAVE_IWF_PASSWORD = robot.brain.get('PAVE_IWF_PASSWORD')
+    PAVE_TENANT_USER = robot.brain.get('PAVE_TENANT_USER')
+    PAVE_BIGIP_ADDR = robot.brain.get('PAVE_BIGIP_ADDR')
+    console.log "PAVE_INPUT.iworkflow_address: #{PAVE_INPUT.iworkflow_address}"
 
 ##########################################################
 ## Collecting object names & UUIDs for object deletions ##
